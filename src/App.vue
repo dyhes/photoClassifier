@@ -20,7 +20,7 @@ setTimeout(()=>{
 
 <template>
   <div v-if="userStatus.isOnline">
-    <Header/>
+    <Header />
     <el-container>
       <el-aside>
         <div>
