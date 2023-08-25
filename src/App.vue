@@ -1,80 +1,77 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { reactive} from 'vue';
+import { RouterView } from 'vue-router'
+import PageLink from './components/PageLink.vue';
+import SignView from "./views/SignView.vue"
+
+const isOnline = eval(localStorage.getItem("isOnline"))
+const userStatus = reactive({
+  isOnline:
+  isOnline  === null? false : isOnline,
+  userName:
+  localStorage.getItem("userName"),
+  avatarUrl: 
+  localStorage.getItem("avatarUrl"),
+})
+
+setTimeout(()=>{
+  userStatus.isOnline = true;
+}, 2000)
 </script>
 
-<template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/upload">Upload</RouterLink>
-        <RouterLink to="/classification">Classification</RouterLink>
-      </nav>
-    </div>
-  </header>
 
-  <RouterView />
+<template>
+  <div v-if="userStatus.isOnline">
+    <el-container>
+      <el-aside>
+        <el-row>
+          <el-text>BIT photo sorter</el-text>
+        </el-row>
+        <el-divider />
+           <el-row>
+            <el-avatar :size="125" :src="userStatus.avatarUrl" />
+           </el-row>
+           <el-row>
+            <el-icon  :size="25"><User /></el-icon>
+            <el-text>{{ userStatus.userName === null? "tester_01" : userStatus.userName }}</el-text>
+           </el-row>
+           <el-divider />
+          <PageLink path = '/' linkText = 'Upload'/>
+          <PageLink path = '/classification' linkText = 'Classification'/>
+      </el-aside>
+      <el-main><RouterView /></el-main>
+    </el-container>
+  </div>
+  <div v-else>
+    <SignView/>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+.el-container {
+  /*设置内部填充为0，几个布局元素之间没有间距*/
+  padding: 0px !important;
+  /*外部间距也是如此设置*/
+  margin: 0px !important;
+  /*统一设置高度为100%*/
+  height: 100vh;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.el-icon {
+  padding-right: 5px;
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.el-row {
+  justify-content: center;
+  padding: 5px;
+  align-items: center;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.el-aside{
+  width: 15%;
+  background-color: rgb(138, 255, 51  );
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.el-text{
+  font-size: 24px;
 }
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.el-divider{
+  margin: 2px 0;
 }
 </style>
