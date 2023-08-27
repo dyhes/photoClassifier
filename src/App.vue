@@ -23,7 +23,8 @@ setTimeout(()=>{
     <Header/>
     <el-container>
       <el-aside>
-        <el-row class="avatar">
+        <div style="position: fixed;">
+          <el-row class="avatar">
           <el-avatar :size="125" :src="userStatus.userName !== null ? userStatus.avatarUrl : ''" />
         </el-row>
         <el-row>
@@ -33,6 +34,7 @@ setTimeout(()=>{
         <el-divider class="divider" />
           <PageLink path = '/' linkText = 'Upload'/>
           <PageLink path = '/classification' linkText = 'Classification'/> 
+        </div>
       </el-aside>
       <el-main><RouterView /></el-main>
     </el-container>
@@ -49,10 +51,10 @@ setTimeout(()=>{
   /*外部间距也是如此设置*/
   margin: 0px !important;
   /*统一设置高度为100%*/
-  height: 100vh;
 }
 .el-main {
    --el-main-padding: 0 !important;
+   margin-top: 70px
 }
 .el-icon {
   padding-right: 5px;
@@ -81,8 +83,5 @@ setTimeout(()=>{
 }
 .el-message {
   position: absolute !important;
-}
-.el-main {
-  margin-top: 70px
 }
 </style>

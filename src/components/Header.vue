@@ -18,26 +18,13 @@
 
 <script setup lang="ts">
 import { reactive} from 'vue';
-import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-//import imgurl from '../assets/img/img.jpg';
 
 const userStatus = reactive({
     isOnline: localStorage.getItem("isOnline")  === null ? false : localStorage.getItem("isOnline"),
     userName: localStorage.getItem("userName"),
     avatarUrl: localStorage.getItem("avatarUrl"),
 })
-
-// onMounted(() => {
-// 	if (document.body.clientWidth < 1500) {
-// 		//collapseChage();
-// 	}
-//     const userStatus = reactive({
-//     isOnline: localStorage.getItem("isOnline")  === null ? false : localStorage.getItem("isOnline"),
-//     userName: localStorage.getItem("userName"),
-//     avatarUrl: localStorage.getItem("avatarUrl"),
-// })
-// });
 
 // 用户名下拉菜单选择事件
 const router = useRouter();

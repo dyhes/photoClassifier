@@ -62,7 +62,7 @@
 
   const imageGroups= ref([
     {
-    "name": "album a",
+    "name": "202307",
     "images": [
       {
         "id": 1,
@@ -100,7 +100,7 @@
   }
   ,
   {
-    "name": "album b",
+    "name": "202308",
     "images": [{
         "id": 3,
         "url": ""
