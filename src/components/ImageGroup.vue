@@ -8,6 +8,7 @@
 </template>
 
 <script setup>
+//hhh
 import BITPhoto from './BITPhoto.vue';
 const props = defineProps(['groupName', 'images','viewDetail'])
 </script>

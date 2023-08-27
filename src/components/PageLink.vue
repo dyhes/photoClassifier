@@ -5,6 +5,7 @@
 </template>
 
 <script setup>
+//hhh
     import { RouterLink } from 'vue-router';
     defineProps(['path', 'linkText'])
 </script>

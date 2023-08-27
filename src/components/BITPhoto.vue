@@ -1,4 +1,5 @@
 <script setup>
+//hhh
 import { ref } from 'vue';
 
 defineProps(['photoId', 'photoSrc', 'viewDetail'])
