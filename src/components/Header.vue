@@ -53,7 +53,7 @@ const handleCommand = (command: string) => {
         localStorage.removeItem('isOnline');
         userStatus.userName = null;
         userStatus.isOnline = false; 
-		router.push('/signin');
+		router.push('/');
 
 	} else if (command == 'user') {
 		router.push('/user');
