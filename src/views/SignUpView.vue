@@ -102,7 +102,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
                 if (data.code === true) {
                     ElMessage.success('注册成功');
-                    router.push('/signin');
+                    router.push('/');
                 } else {
                     ElMessage.error('注册失败');
                 }
@@ -117,7 +117,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 };
 
 const signInFrom = () => {
-    router.push('/signin');
+    router.push('/');
 };
 </script>
 
