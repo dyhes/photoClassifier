@@ -84,7 +84,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     localStorage.setItem('userName', param.username);
                     localStorage.setItem('isOnline', 'true');
 
-                    router.push('/home');
+                    router.push('/');
                 } else {
                     ElMessage.error('登录失败');
                 }
