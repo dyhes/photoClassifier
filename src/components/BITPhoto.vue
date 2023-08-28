@@ -20,9 +20,13 @@ const deletePhoto = () => {
   padding: 5px;
   margin:2.5px;
   transition: all 0.25s linear;
+  border-radius: 1.2rem !important;
+  cursor: pointer;
 }
 .photo:hover{
   background-color: rebeccapurple;
   transition: all 0.25s linear;
 }
+
+
 </style>

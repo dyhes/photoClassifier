@@ -26,8 +26,9 @@
 					<el-button type="primary" @click="submitForm(login)">登录</el-button>
 				</div>
                 <div class="signup">
-                    <p class="login-tips">没有账号？</p>
-                    <el-button class="signup-btn" @click="signUpFrom()">注册</el-button>
+                    <!-- <p class="login-tips">没有账号？</p> -->
+    				<!-- <router-link class="signup-btn" to="/signup">注册</router-link> -->
+                    <!-- <el-button class="signup-btn" @click="signUpFrom()">注册</el-button> -->
                 </div>
 			</el-form>
 		</div>
@@ -40,6 +41,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { Lock, User } from '@element-plus/icons-vue';
+import { useStore } from 'vuex';
 
 interface LoginInfo {
     username: string;
@@ -64,6 +66,7 @@ const rules: FormRules = {
 };
 const login = ref<FormInstance>();
 
+const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
@@ -81,10 +84,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
                 if (data.code === true) {
                     ElMessage.success('登录成功');
-                    localStorage.setItem('userName', param.username);
-                    localStorage.setItem('isOnline', 'true');
-
-                    router.push('/');
+					store.dispatch('setUser', {
+						isOnline: true,
+						userName: param.username,
+						avatarUrl: 'profile.jpg',
+					});
+                    router.push('/upload');
                 } else {
                     ElMessage.error('登录失败');
                 }
@@ -97,11 +102,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         }
     });
 };
-
-const signUpFrom = () => {
-    router.push('/signup');
-};
-
+// const signUpFrom = () => {
+// 	router.push('/signup');
+// }
 </script>
 
 <style scoped>
@@ -161,5 +164,8 @@ const signUpFrom = () => {
 }
 .el-message {
   position: absolute !important;
+}
+.el-aside {
+	display: none !important;
 }
 </style>

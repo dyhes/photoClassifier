@@ -17,7 +17,7 @@
     element-loading-text = "loading">
             <ImageGroup  v-for = "imageGroup in imageGroups"
             :key="imageGroup.name" :group-name="imageGroup.name"   :images="imageGroup.images"  :view-detail="viewDetail"/>
-        <el-dialog v-model="dialogVisible" width = '80%' top="7.5vh">
+        <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
               <el-image :src='photoDetail.url'/>
@@ -181,13 +181,14 @@
 
   <style scoped>
   #deleteButton {
-    padding-top: 100px;
+    padding-top: 40px;
     display: flex;
     align-items: center;
-    justify-content: center;
   }
   .el-select {
     padding: 10px;
+    box-shadow:0 0 2rem rgba(0,0,0,.14)!important;
+    border-radius: 1rem;
   }
   .el-descriptions {
     padding-top: 20px;
@@ -196,6 +197,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .el-main {
+    background-color: #fff;
+    color: #000;
+  }
+  .el-header {
+    background-color: #fff;
+    margin-bottom: -40px;
+    margin-right: 30px;
+    margin-top: 15px;
+  }
+  .image-group {
+    box-shadow: 0 0 2rem rgba(0,0,0,.14)!important;
+    border-radius: 1.3rem;
+  }
+  .image_inner {
+    border-radius: 1.2rem !important;
+  }
+  .el-image {
+    border-radius: 1.2rem !important;
   }
 
 </style>

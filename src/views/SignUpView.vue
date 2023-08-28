@@ -1,5 +1,5 @@
 <template>
-    <div class="login-wrap">
+    <div class="signin-wrapper">
         <div class="ms-login">
             <div class="ms-title">照片分类系统 - 注册</div>
             <el-form :model="param" :rules="rules" ref="signup" label-width="0px" class="ms-content">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="signin">
                     <p class="login-tips">已有账号？</p>
-                    <el-button class="signin-btn" @click="signInFrom()">登录</el-button>
+                    <el-button class="signin-btn" @click="signInForm()">登录</el-button>
                 </div>
             </el-form>
         </div>
@@ -47,13 +47,14 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
 import { Lock, User } from '@element-plus/icons-vue';
+import { useStore } from 'vuex';
 
 interface SignupInfo {
     username: string;
     email: string;
     password: string;
 }
-
+const store = useStore();
 const router = useRouter();
 const param = reactive<SignupInfo>({
     username: 'Jay',
@@ -83,8 +84,6 @@ const rules: FormRules = {
     ],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
-
-const signup = ref<FormInstance>();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
@@ -116,13 +115,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     });
 };
 
-const signInFrom = () => {
-    router.push('/');
+const signInForm = () => {
+    router.push('/signin');
 };
+
 </script>
 
 <style scoped>
-.login-wrap {
+.signin-wrapper {
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -139,6 +139,11 @@ const signInFrom = () => {
 	color: #000;
     font-weight: 700;
 	border-bottom: 1px solid #625f5fa3;
+}
+.el-container {
+  padding: 0px !important;
+  margin: 0px !important;
+  height: 100vh;
 }
 .ms-login {
 	position: absolute;
@@ -176,4 +181,8 @@ const signInFrom = () => {
     color: #337ecc;
     border: none;
 }
+.el-aside {
+    display: none !important;
+}
+
 </style>

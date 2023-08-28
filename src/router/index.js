@@ -14,7 +14,7 @@ const router = createRouter({
       component: () => import('../views/SignUpView.vue')
     },
     {
-      path: '/',
+      path: '/upload',
       name: 'upload',
       component: () => import('../views/UploadView.vue'),
       meta: { requiresAuth: true }, 
@@ -27,13 +27,13 @@ const router = createRouter({
     }
   ]
 })
-// router.beforeEach((to, from, next) => {
-//   const isAuthenticated = localStorage.getItem('userName'); 
-//   if (to.meta.requiresAuth && !isAuthenticated) {
-//     next({ name: 'signin' });
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('userName'); 
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: 'signin' });
+  } else {
+    next();
+  }
+});
 
 export default router
