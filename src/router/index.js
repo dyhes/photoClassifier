@@ -1,16 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+//hhh
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
-      name: 'home',
-      component: () => import('../views/HomeView.vue'),
-      meta: { requiresAuth: true }, 
-    },
-    {
-      path: '/',
+      path: '/signin',
       name: 'signin',
       component: () => import('../views/SignInView.vue')
     },
@@ -20,7 +14,7 @@ const router = createRouter({
       component: () => import('../views/SignUpView.vue')
     },
     {
-      path: '/upload',
+      path: '/',
       name: 'upload',
       component: () => import('../views/UploadView.vue'),
       meta: { requiresAuth: true }, 
@@ -33,13 +27,13 @@ const router = createRouter({
     }
   ]
 })
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('userName'); 
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'signin' });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = localStorage.getItem('userName'); 
+//   if (to.meta.requiresAuth && !isAuthenticated) {
+//     next({ name: 'signin' });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router
