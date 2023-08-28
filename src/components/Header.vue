@@ -35,6 +35,7 @@ const handleCommand = (command) => {
         userStatus.userName = null;
         userStatus.isOnline = false; 
 		router.push('/');
+
 	} else if (command == 'user') {
 		router.push('/user');
 	}
