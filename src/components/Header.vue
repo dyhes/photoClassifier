@@ -18,43 +18,23 @@
 
 <script setup lang="ts">
 import { reactive} from 'vue';
-import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import imgurl from '../assets/img/img.jpg';
 
-const isOnline = eval(localStorage.getItem("isOnline"))
 const userStatus = reactive({
-    isOnline: isOnline  === null ? false : isOnline,
+    isOnline: localStorage.getItem("isOnline")  === null ? false : localStorage.getItem("isOnline"),
     userName: localStorage.getItem("userName"),
     avatarUrl: localStorage.getItem("avatarUrl"),
 })
 
-// setTimeout(()=>{
-//     userStatus.isOnline = true;
-// }, 0)
-
-onMounted(() => {
-	if (document.body.clientWidth < 1500) {
-		collapseChage();
-	}
-    const isOnline = eval(localStorage.getItem("isOnline"))
-    const userStatus = reactive({
-        isOnline: isOnline  === null ? false : isOnline,
-        userName: localStorage.getItem("userName"),
-        avatarUrl: localStorage.getItem("avatarUrl"),
-    })
-});
-
 // 用户名下拉菜单选择事件
 const router = useRouter();
-const handleCommand = (command: string) => {
+const handleCommand = (command) => {
 	if (command == 'logout') {
 		localStorage.removeItem('userName');
         localStorage.removeItem('isOnline');
         userStatus.userName = null;
         userStatus.isOnline = false; 
-		router.push('/signin');
-
+		router.push('/');
 	} else if (command == 'user') {
 		router.push('/user');
 	}

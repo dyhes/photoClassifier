@@ -1,7 +1,8 @@
 <script setup>
+//hhh
 import { reactive} from 'vue';
 import { RouterView } from 'vue-router'
-// import PageLink from './components/PageLink.vue';
+ import PageLink from './components/PageLink.vue';
 import SignInView from "./views/SignInView.vue"
 import Header from "./components/Header.vue"
 
@@ -14,15 +15,16 @@ const userStatus = reactive({
 
 setTimeout(()=>{
   userStatus.isOnline = true;
-}, 0)
+}, 2000)
 </script>
 
 <template>
   <div v-if="userStatus.isOnline">
-    <Header />
+    <Header/>
     <el-container>
       <el-aside>
-        <el-row class="avatar">
+        <div>
+          <el-row class="avatar">
           <el-avatar :size="125" :src="userStatus.userName !== null ? userStatus.avatarUrl : ''" />
         </el-row>
         <el-row>
@@ -30,10 +32,11 @@ setTimeout(()=>{
           <el-text>{{ userStatus.userName === null ? "Signin or Signup" : userStatus.userName }}</el-text>
         </el-row>
         <el-divider class="divider" />
-          <!-- <PageLink path = '/' linkText = 'Upload'/>
-          <PageLink path = '/classification' linkText = 'Classification'/> -->
+          <PageLink path = '/' linkText = 'Upload'/>
+          <PageLink path = '/classification' linkText = 'Classification'/> 
+        </div>
       </el-aside>
-      <el-main><RouterView /></el-main>
+      <el-main class="hidescroll"><RouterView /></el-main>
     </el-container>
   </div>
   <div v-else>
@@ -52,6 +55,7 @@ setTimeout(()=>{
 }
 .el-main {
    --el-main-padding: 0 !important;
+   margin-top: 70px
 }
 .el-icon {
   padding-right: 5px;
@@ -81,7 +85,12 @@ setTimeout(()=>{
 .el-message {
   position: absolute !important;
 }
-.el-main {
-  margin-top: 70px
+.hidescroll {
+    overflow:auto;
+scrollbar-width: none; /* Firefox */
+-ms-overflow-style:none; /* IE10+ */
+&::-webkit-scrollbar{
+  display:none; /* ChromeSafari */
 }
+  }
 </style>

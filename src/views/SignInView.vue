@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineEmits } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -84,7 +84,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     localStorage.setItem('userName', param.username);
                     localStorage.setItem('isOnline', 'true');
 
-                    router.push('/home');
+                    router.push('/');
                 } else {
                     ElMessage.error('登录失败');
                 }
