@@ -2,6 +2,7 @@
 import { reactive, computed} from 'vue';
 import { RouterView, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
 import PageLink from './components/PageLink.vue'
 import SignInView from './views/SignInView.vue'
 import SignUpView from './views/SignUpView.vue'
@@ -17,6 +18,7 @@ const userStatus = computed(() => ({
 // 用户名下拉菜单选择事件
 const router = useRouter();
 const handleCommand = (command) => {
+    ElMessage.success('退出成功');
 	if (command == 'logout') {
     store.dispatch('logout', {
       isOnline: false,
