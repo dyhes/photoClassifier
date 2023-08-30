@@ -113,6 +113,7 @@
   
   const selectionValue = ref('date')
 
+<<<<<<< HEAD
   const deleteSpecificPhoto = () => {
     deletingPhoto.value = true
     setTimeout(()=> {
@@ -151,6 +152,8 @@
     'format' : 'jpeg'
   })
 
+=======
+>>>>>>> 7fc4b98 (sidebar added)
   watch(selectionValue,async (value) => {
     console.log(value);
     isLoading.value = true;
@@ -169,15 +172,19 @@
       label: 'By location',
     },
     {
+<<<<<<< HEAD
       value: 'format',
       label: 'By format',
     },
     {
+=======
+>>>>>>> 7fc4b98 (sidebar added)
       value: 'ai',
       label: 'AI powered',
     },
   ]
   </script>
+<<<<<<< HEAD
 
   <style scoped>
   #deleteButton {
@@ -199,3 +206,6 @@
   }
 
 </style>
+=======
+  
+>>>>>>> 7fc4b98 (sidebar added)
