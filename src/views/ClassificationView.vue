@@ -96,8 +96,8 @@
           }
         }
       )
-      photoDetail = res.data
-      photoIsLoading = false
+      photoDetail.value = res.data
+      photoIsLoading.value = false
     } catch (error) {
       ElMessage.error(error.message)
     }
@@ -105,7 +105,7 @@
 
   const isLoading = ref(true)
 
-  const photoDetail = reactive( {
+  const photoDetail = ref( {
   })
 
   watch(selectionValue,async (value) => {

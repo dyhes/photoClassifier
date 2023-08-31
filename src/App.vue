@@ -19,14 +19,15 @@ const userStatus = computed(() => ({
 // 用户名下拉菜单选择事件
 const router = useRouter();
 const handleCommand = (command) => {
-    ElMessage.success('退出成功');
 	if (command == 'logout') {
+    ElMessage.success('退出成功');
     store.dispatch('logout', {
       isOnline: false,
       userName: null,
       avatarUrl: null,
       token: null
     });
+    // console.log(localStorage.getItem('token'))
 		router.push('/signin');
 	} else if (command == 'user') {
 		router.push('/user');
@@ -54,11 +55,11 @@ const handleCommand = (command) => {
       <el-aside>
 		    <div class="logo">BIT Photo Sorter</div>
         <el-row class="avatar">
-          <el-avatar :size="125" :src="userStatus.userName !== null ? userStatus.avatarUrl : ''" />
+          <el-avatar :size="125" :src="userStatus.avatarUrl"/>
         </el-row>
         <el-row>
           <el-icon  :size="25"><User /></el-icon>
-          <el-text>{{ userStatus.userName === null ? "Signin or Signup" : userStatus.userName }}</el-text>
+          <el-text>{{ userStatus.userName }}</el-text>
         </el-row>
         <el-divider class="divider" />
           <PageLink path = '/upload' linkText = 'Upload'/>
@@ -69,7 +70,7 @@ const handleCommand = (command) => {
   </div>
   <div v-else class="container">
     <SignInView/> 
-  </div>
+    </div>
 </template>
 
 <style scoped>
