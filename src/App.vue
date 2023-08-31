@@ -73,9 +73,9 @@ setTimeout(()=>{
       <el-main><RouterView /></el-main>
     </el-container>
   </div>
-  <div v-else class="el-container">
-    <RouterView />
-  </div>
+  <div v-else class="container">
+    <RouterView/> 
+    </div>
 </template>
 
 <style scoped>
