@@ -84,8 +84,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-					const token = localStorage.setItem('token', 'Bearer ' + data.data.token);
-					// console.log(data.data.token);
+					const token = localStorage.setItem('token', 'Bearer ' + data.data);
+					// console.log(data.data);
 
                     ElMessage.success('登录成功');
                     store.dispatch('setUser', {
