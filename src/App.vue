@@ -30,16 +30,11 @@ const handleCommand = (command) => {
 		router.push('/user');
 	}
 };
-
-setTimeout(()=>{
-  userStatus.isOnline = true;
-}, 2000);
-
 </script>
 
 <template>
   <div v-if="userStatus.isOnline">
-    <el-container>
+    <el-container class = 'container'>
       <div class="header">
         <div class="header-right">
           <div class="header-user-con">
@@ -70,13 +65,17 @@ setTimeout(()=>{
       <el-main><RouterView /></el-main>
     </el-container>
   </div>
-  <div v-else class="el-container">
+  <div v-else class="container">
     <SignInView/> 
   </div>
 </template>
 
 <style scoped>
 .el-container {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.container {
   padding: 0px !important;
   margin: 0px !important;
   height: 100vh;

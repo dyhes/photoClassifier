@@ -1,13 +1,33 @@
 
 <script setup>
 //hhh
+import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
+import axios from 'axios'
 
-defineProps(['photoId', 'photoSrc', 'viewDetail'])
+const props = defineProps(['photoId', 'photoSrc', 'viewDetail'])
 const photoExist = ref(true);
 const deletePhoto = () => {
-  photoExist.value = false;
-  console.log("delete")
+const auth = 'Bearer ' + localStorage.getItem('token')
+axios.post('http://localhost:8080/images/delete', {
+    'photoId' : props.photoId
+  },  {
+    headers :  {
+        'Content-Type'  : 'Application/json',
+        'Authorization' : auth
+      }
+    }
+  ).then( (res) => {
+    if (res.data.code) {
+      ElMessage({
+      message: res.data.msg,
+      type: 'success',
+    })
+    photoExist.value = false
+    } else ElMessage.error(res.data.msg);
+  }).catch((err) => {
+    ElMessage.error(err)
+  })
 }
 </script>
 

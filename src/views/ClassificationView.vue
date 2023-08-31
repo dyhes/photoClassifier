@@ -23,7 +23,7 @@
               <el-image :src='photoDetail.url'/>
             </el-main>
             <el-aside v-loading = 'photoDetail.isLoading' element-loading-text = "loading details form server">
-              <el-descriptions title="Photo Detail" column = '1'>
+              <el-descriptions title="Photo Detail" :column = 1>
               <el-descriptions-item label="width">  {{ photoDetail.width }}  </el-descriptions-item>
               <el-descriptions-item label="height"> {{ photoDetail.height }}  </el-descriptions-item>
               <el-descriptions-item label="size"> {{ photoDetail.size }} </el-descriptions-item>
@@ -46,9 +46,9 @@
   </template>
   
   <script lang="ts" setup>
-  //hhh
   import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
+  import axios from 'axios'
   import ImageGroup from '../components/ImageGroup.vue';
 
 
@@ -60,86 +60,37 @@
 
   const dialogVisible = ref(false)
 
-  const imageGroups= ref([
-    {
-    "name": "202307",
-    "images": [
-      {
-        "id": 1,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-    },
-    {
-    "id": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  }
-]
-  }
-  ,
-  {
-    "name": "202308",
-    "images": [{
-        "id": 3,
-        "url": ""
-    },
-    {
-    "id": 4,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  }]
-  }])
+  const imageGroups= ref()
   
-  const selectionValue = ref('date')
+  const selectionValue = ref(1)
 
-<<<<<<< HEAD
-  const deleteSpecificPhoto = () => {
+  const deleteSpecificPhoto = async () => {
     deletingPhoto.value = true
-    setTimeout(()=> {
-      deletePhotoFunc();
-      deletingPhoto.value = false
-      dialogVisible.value = false;
-      successMessage('photo successfully deleted!')
-    }, 500)
+    await deletePhotoFunc();
+    deletingPhoto.value = false
+    dialogVisible.value = false
   }
 
-  const viewDetail = (photoId, photoSrc, deletePhoto) => {
+  const viewDetail = async (photoId, photoSrc, deletePhoto) => {
     dialogVisible.value = true
     deletePhotoFunc = deletePhoto
     photoDetail.url = photoSrc
     photoDetail.isLoading = true
-    setTimeout(()=>{
+    try {
+      const auth = 'Bearer ' + localStorage.getItem('token')
+      const res = await axios.post('http://localhost:8080/images/detail', {
+        photoId
+        },  {
+        headers :  {
+            'Content-Type'  : 'Application/json',
+            'Authorization' :  auth
+          }
+        }
+      )
       photoDetail.isLoading = false
-    }, 1000)
-    //request
-  }
-
-  const successMessage = (msg) => {
-    ElMessage({
-    message: msg,
-    type: 'success',
-  })
+    } catch (error) {
+      ElMessage.error(error.message)
+    }
   }
 
   const photoDetail = reactive( {
@@ -152,39 +103,54 @@
     'format' : 'jpeg'
   })
 
-=======
->>>>>>> 7fc4b98 (sidebar added)
   watch(selectionValue,async (value) => {
-    console.log(value);
     isLoading.value = true;
-    setTimeout(() => {
-        isLoading.value = false
-    }, 2000);
+    console.log(value);
+    try {
+      const auth = 'Bearer ' + localStorage.getItem('token')
+      
+      const res = await fetch('http://localhost:8080/images/classification', 
+      {
+        method : 'POST',
+        body : JSON.stringify({
+        'classificationType' : value
+        }),
+        headers : {
+            'Content-Type'  : 'Application/json',
+            'Authorization' :  auth
+          }
+      });
+      const data = await res.json();
+      if (data.code) {
+        imageGroups.value = data.data;
+      } else {
+        imageGroups.value = [];
+        ElMessage.error(data.msg);
+      }
+      isLoading.value = false
+    } catch (error) {
+      ElMessage.error(error)
+    }
   }, {immediate:true})
   
   const options = [
     {
-      value: 'date',
+      value: 1,
       label: 'By date',
     },
     {
-      value: 'location',
+      value: 2,
       label: 'By location',
     },
-    {
-<<<<<<< HEAD
-      value: 'format',
+    { value: 3,
       label: 'By format',
     },
     {
-=======
->>>>>>> 7fc4b98 (sidebar added)
-      value: 'ai',
+      value: 4,
       label: 'AI powered',
     },
   ]
   </script>
-<<<<<<< HEAD
 
   <style scoped>
   #deleteButton {
@@ -207,11 +173,12 @@
   }
   .el-main {
     background-color: #fff;
+    min-height: 70vh;
     color: #000;
   }
   .el-header {
     background-color: #fff;
-    margin-bottom: -40px;
+    margin-bottom: 10px;
     margin-right: 30px;
     margin-top: 15px;
   }
@@ -227,6 +194,3 @@
   }
 
 </style>
-=======
-  
->>>>>>> 7fc4b98 (sidebar added)
