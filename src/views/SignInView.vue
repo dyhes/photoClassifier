@@ -72,7 +72,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('https://localhost:8080/login', {
+                const response = await fetch('http://localhost:8080/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -83,13 +83,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-                    ElMessage.success('登录成功');
-					store.dispatch('setUser', {
-						isOnline: true,
-						userName: param.username,
-						avatarUrl: 'profile.jpg',
-					});
-                    router.push('/upload');
+					const token = localStorage.setItem('token', 'Bearer ' + data.data.token);
+					// console.log(data.data.token);
+                    store.dispatch('setUser', {
+                        isOnline: true,
+                        userName: param.username,
+                        avatarUrl: 'profile.jpg',
+						token: token
+                    });
                 } else {
                     ElMessage.error('登录失败');
                 }

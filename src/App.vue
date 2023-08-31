@@ -13,6 +13,7 @@ const userStatus = computed(() => ({
   isOnline: store.state.user.isOnline === null ? false : store.state.user.isOnline,
   userName: store.state.user.userName,
   avatarUrl: store.state.user.avatarUrl,
+  token: store.state.user.token
 }));
 
 // 用户名下拉菜单选择事件
@@ -24,22 +25,18 @@ const handleCommand = (command) => {
       isOnline: false,
       userName: null,
       avatarUrl: null,
+      token: null
     });
 		router.push('/signin');
 	} else if (command == 'user') {
 		router.push('/user');
 	}
 };
-
-setTimeout(()=>{
-  userStatus.isOnline = true;
-}, 2000);
-
 </script>
 
 <template>
   <div v-if="userStatus.isOnline">
-    <el-container>
+    <el-container class = 'container'>
       <div class="header">
         <div class="header-right">
           <div class="header-user-con">
@@ -70,13 +67,17 @@ setTimeout(()=>{
       <el-main><RouterView /></el-main>
     </el-container>
   </div>
-  <div v-else class="el-container">
+  <div v-else class="container">
     <SignInView/> 
   </div>
 </template>
 
 <style scoped>
 .el-container {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+.container {
   padding: 0px !important;
   margin: 0px !important;
   height: 100vh;
