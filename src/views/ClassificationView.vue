@@ -20,16 +20,22 @@
         <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
-              <el-image :src='photoDetail.url'/>
+              <el-image :src=' photoUrl'/>
             </el-main>
-            <el-aside v-loading = 'photoDetail.isLoading' element-loading-text = "loading details form server">
+            <el-aside v-loading = 'photoIsLoading' element-loading-text = "loading details form server">
               <el-descriptions title="Photo Detail" :column = 1>
-              <el-descriptions-item label="width">  {{ photoDetail.width }}  </el-descriptions-item>
-              <el-descriptions-item label="height"> {{ photoDetail.height }}  </el-descriptions-item>
-              <el-descriptions-item label="size"> {{ photoDetail.size }} </el-descriptions-item>
-              <el-descriptions-item label="date">{{ photoDetail.date }}</el-descriptions-item>
-              <el-descriptions-item label="format"> {{ photoDetail.format }}  </el-descriptions-item>
-              <el-descriptions-item label="url"> {{ photoDetail.url }}  </el-descriptions-item>
+              <el-descriptions-item label="imageID">  {{ photoDetail.imageID }}  </el-descriptions-item>
+              <el-descriptions-item label="imageName"> {{ photoDetail.imageName }}  </el-descriptions-item>
+              <el-descriptions-item label="imageType"> {{ photoDetail.imageType }} </el-descriptions-item>
+              <el-descriptions-item label="imageSize">{{ photoDetail.imageSize }}</el-descriptions-item>
+              <el-descriptions-item label="imagePath"> {{ photoDetail.imagePath }}  </el-descriptions-item>
+              <el-descriptions-item label="imageTag">  {{ photoDetail.imageTag }}  </el-descriptions-item>
+              <el-descriptions-item label="cameraName"> {{ photoDetail.cameraName }}  </el-descriptions-item>
+              <el-descriptions-item label="address"> {{ photoDetail.address }} </el-descriptions-item>
+              <el-descriptions-item label="shootingTime">{{ photoDetail.shootingTime }}</el-descriptions-item>
+              <el-descriptions-item label="modifiedTime"> {{ photoDetail.modifiedTime }}  </el-descriptions-item>
+              <el-descriptions-item label="uploadTime"> {{ photoDetail.uploadTime }}  </el-descriptions-item>
+              <el-descriptions-item label="url"> {{ photoUrl }}  </el-descriptions-item>
             </el-descriptions>
             <div id = 'deleteButton'>
               <el-popconfirm title="Are you sure to delete this photo?" @confirm = 'deleteSpecificPhoto'>
@@ -45,16 +51,18 @@
     </el-container>
   </template>
   
-  <script lang="ts" setup>
+  <script setup>
   import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import axios from 'axios'
   import ImageGroup from '../components/ImageGroup.vue';
+  import { useStore } from 'vuex';
 
+  const store = useStore();
 
   const deletingPhoto = ref(false)
 
-  const isLoading = ref(false)
+  const photoIsLoading = ref (true)
 
   var deletePhotoFunc = () => {};
 
@@ -71,44 +79,39 @@
     dialogVisible.value = false
   }
 
+  const photoUrl = ref()
+
   const viewDetail = async (photoId, photoSrc, deletePhoto) => {
     dialogVisible.value = true
     deletePhotoFunc = deletePhoto
-    photoDetail.url = photoSrc
-    photoDetail.isLoading = true
+    photoUrl.value = photoSrc
+    photoIsLoading.value = true
     try {
-      const auth = 'Bearer ' + localStorage.getItem('token')
       const res = await axios.post('http://localhost:8080/images/detail', {
-        photoId
+        'imageId' : photoId
         },  {
         headers :  {
             'Content-Type'  : 'Application/json',
-            'Authorization' :  auth
+            'Authorization' :  store.state.user.token
           }
         }
       )
-      photoDetail.isLoading = false
+      photoDetail = res.data
+      photoIsLoading = false
     } catch (error) {
       ElMessage.error(error.message)
     }
   }
 
+  const isLoading = ref(true)
+
   const photoDetail = reactive( {
-    'isLoading' : true,
-    'url' : 'https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg',
-    'date' : '2023.8.26',
-    'width'  : '512 px',
-    'height'  : '512px',
-    'size'  : '24B',
-    'format' : 'jpeg'
   })
 
   watch(selectionValue,async (value) => {
     isLoading.value = true;
     console.log(value);
     try {
-      const auth = 'Bearer ' + localStorage.getItem('token')
-      
       const res = await fetch('http://localhost:8080/images/classification', 
       {
         method : 'POST',
@@ -117,7 +120,7 @@
         }),
         headers : {
             'Content-Type'  : 'Application/json',
-            'Authorization' :  auth
+            'Authorization' :  store.state.user.token
           }
       });
       const data = await res.json();

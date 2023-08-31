@@ -27,9 +27,12 @@
   import { ElMessageBox } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import type { UploadProps, UploadUserFile } from 'element-plus'
+  import { useStore } from 'vuex';
+
+  const store = useStore();
   
   const header = {
-    Authorization : `Bearer ${localStorage.getItem('token')}`
+    Authorization : store.state.user.token
   }
 
   const fileList = ref<UploadUserFile[]>([])

@@ -4,17 +4,18 @@
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 import axios from 'axios'
+import { useStore } from 'vuex';
 
+const store = useStore();
 const props = defineProps(['photoId', 'photoSrc', 'viewDetail'])
 const photoExist = ref(true);
 const deletePhoto = () => {
-const auth = 'Bearer ' + localStorage.getItem('token')
 axios.post('http://localhost:8080/images/delete', {
     'photoId' : props.photoId
   },  {
     headers :  {
         'Content-Type'  : 'Application/json',
-        'Authorization' : auth
+        'Authorization' : store.state.user.token
       }
     }
   ).then( (res) => {
