@@ -1,15 +1,15 @@
 <template>
-    <div class="signin-wrapper">
-        <div class="ms-login">
-            <div class="ms-title">照片分类系统 - 注册</div>
-            <el-form :model="param" :rules="rules" ref="signup" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
-                        <template #prepend>
-                            <el-button :icon="User"></el-button>
-                        </template>
-                    </el-input>
-                </el-form-item>
+	<div class="forget-pass-wrap">
+		<div class="ms-fpwd">
+			<div class="ms-title">照片分类系统 -  忘记密码</div>
+			<el-form :model="param" :rules="rules" ref="forgotPassword" label-width="0px" class="ms-content">
+				<el-form-item prop="username">
+					<el-input v-model="param.username" placeholder="username">
+						<template #prepend>
+							<el-button :icon="User"></el-button>
+						</template>
+					</el-input>
+				</el-form-item>
                 <el-form-item prop="email">
                     <el-input v-model="param.email" placeholder="email">
                         <template #prepend>
@@ -17,31 +17,19 @@
                         </template>
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                        type="password"
-                        placeholder="password"
-                        v-model="param.password"
-                        @keyup.enter="submitForm(signup)"
-                    >
-                        <template #prepend>
-                            <el-button :icon="Lock"></el-button>
-                        </template>
-                    </el-input>
-                </el-form-item>
-                <div class="login-btn">
-                    <el-button type="primary" @click="submitForm(signup)">注册</el-button>
-                </div>
-                <div class="signin">
-                    <p class="login-tips">有账号？</p>
-    				<router-link class="signup-btn" to="/signin">登陆 </router-link>
-
-					<p class="f-pwd-info">忘记密码？</p>
-    				<router-link class="f-pwd" to="/forgot-password">忘记密码</router-link>
+				<div class="login-btn">
+					<el-button type="primary" @click="submitForm(forgotPassword)">登录</el-button>
 				</div>
-            </el-form>
-        </div>
-    </div>
+                <div class="signup">
+                    <p class="login-tips">记得密码？</p>
+    				<router-link class="signin-btn" to="/signin">登陆 </router-link>
+
+					<p class="signup-tips">没有账户？</p>
+    				<router-link class="signup-btn" to="/signup">注册</router-link>
+				</div>
+			</el-form>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -52,16 +40,15 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { Lock, User } from '@element-plus/icons-vue';
 import { useStore } from 'vuex';
 
-interface SignupInfo {
+interface LoginInfo {
     username: string;
     email: string;
-    password: string;
 }
+
 const router = useRouter();
-const param = reactive<SignupInfo>({
+const param = reactive<LoginInfo>({
     username: 'Jay',
-    email: 'jay@mail.com',
-    password: '123456'
+    email: 'jay@mail.com'
 });
 
 const rules: FormRules = {
@@ -84,19 +71,18 @@ const rules: FormRules = {
             trigger: ['blur', 'change']
         }
     ],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
+const login = ref<FormInstance>();
 const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('http://localhost:8080/users/signup', {
-
+                const response = await fetch('http://localhost:8080/users/forgetPassword', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'multipart/form-data'
                     },
                     body: JSON.stringify(param)
                 });
@@ -104,23 +90,26 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
+                    // Store the token in localStorage
+					const token = localStorage.setItem('token', data.data.token);
+					// console.log(data.data.token);
+                    ElMessage.success('登录成功');
                     store.dispatch('setUser', {
-                        isOnline: null,
-                        userName: null,
-                        avatarUrl: null,
-						token: null
+                        isOnline: true,
+                        userName: param.username,
+                        avatarUrl: 'profile.jpg',
+						token: token
                     });
-                    ElMessage.success('注册成功');
-                    router.push('/signin');
+                    router.push('/upload');
                 } else {
-                    ElMessage.error('注册失败');
+                    ElMessage.error('登录失败');
                 }
             } catch (error) {
-                console.error('Error during signup:', error);
-                ElMessage.error('注册失败');
+                console.error('Error during login:', error);
+                ElMessage.error('登录失败');
             }
         } else {
-            ElMessage.error('请输入正确的信息');
+            ElMessage.error('请输入正确的用户名和密码');
         }
     });
 };
@@ -128,7 +117,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 </script>
 
 <style scoped>
-.signin-wrapper {
+.forget-pass-wrap {
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -146,12 +135,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     font-weight: 700;
 	border-bottom: 1px solid #625f5fa3;
 }
-.el-container {
-  padding: 0px !important;
-  margin: 0px !important;
-  height: 100vh;
-}
-.ms-login {
+.ms-fpwd {
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -178,7 +162,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 	color: #000;
     text-align: center;
 }
-.signin {
+.signup {
     display: flex;
     justify-content: center;
 }
@@ -188,25 +172,16 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     border: none;
 	text-decoration: none;
 }
-.el-aside {
-    display: none !important;
-}
-.f-pwd {
-	margin-top: 5px;
-    color: #337ecc;
-    border: none;
-	text-decoration: none;
-}
-.f-pwd-info {
+
+.signup-tips {
 	margin-top: 5px;
 	margin-left: 30px;
 	color: #000;
 }
-.signup-btn {
-	margin-top: 5px;
-    color: #337ecc;
-    border: none;
-	text-decoration: none;
+.el-message {
+  position: absolute !important;
 }
-
+.el-aside {
+	display: none !important;
+}
 </style>
