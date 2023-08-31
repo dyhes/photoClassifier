@@ -20,16 +20,22 @@
         <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
-              <el-image :src='photoDetail.url'/>
+              <el-image :src=' photoUrl'/>
             </el-main>
-            <el-aside v-loading = 'photoDetail.isLoading' element-loading-text = "loading details form server">
-              <el-descriptions title="Photo Detail" column = '1'>
-              <el-descriptions-item label="width">  {{ photoDetail.width }}  </el-descriptions-item>
-              <el-descriptions-item label="height"> {{ photoDetail.height }}  </el-descriptions-item>
-              <el-descriptions-item label="size"> {{ photoDetail.size }} </el-descriptions-item>
-              <el-descriptions-item label="date">{{ photoDetail.date }}</el-descriptions-item>
-              <el-descriptions-item label="format"> {{ photoDetail.format }}  </el-descriptions-item>
-              <el-descriptions-item label="url"> {{ photoDetail.url }}  </el-descriptions-item>
+            <el-aside v-loading = 'photoIsLoading' element-loading-text = "loading details form server">
+              <el-descriptions title="Photo Detail" :column = 1>
+              <el-descriptions-item label="imageID">  {{ photoDetail.imageID }}  </el-descriptions-item>
+              <el-descriptions-item label="imageName"> {{ photoDetail.imageName }}  </el-descriptions-item>
+              <el-descriptions-item label="imageType"> {{ photoDetail.imageType }} </el-descriptions-item>
+              <el-descriptions-item label="imageSize">{{ photoDetail.imageSize }}</el-descriptions-item>
+              <el-descriptions-item label="imagePath"> {{ photoDetail.imagePath }}  </el-descriptions-item>
+              <el-descriptions-item label="imageTag">  {{ photoDetail.imageTag }}  </el-descriptions-item>
+              <el-descriptions-item label="cameraName"> {{ photoDetail.cameraName }}  </el-descriptions-item>
+              <el-descriptions-item label="address"> {{ photoDetail.address }} </el-descriptions-item>
+              <el-descriptions-item label="shootingTime">{{ photoDetail.shootingTime }}</el-descriptions-item>
+              <el-descriptions-item label="modifiedTime"> {{ photoDetail.modifiedTime }}  </el-descriptions-item>
+              <el-descriptions-item label="uploadTime"> {{ photoDetail.uploadTime }}  </el-descriptions-item>
+              <el-descriptions-item label="url"> {{ photoUrl }}  </el-descriptions-item>
             </el-descriptions>
             <div id = 'deleteButton'>
               <el-popconfirm title="Are you sure to delete this photo?" @confirm = 'deleteSpecificPhoto'>
@@ -45,146 +51,109 @@
     </el-container>
   </template>
   
-  <script lang="ts" setup>
-  //hhh
+  <script setup>
   import { reactive, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
+  import axios from 'axios'
   import ImageGroup from '../components/ImageGroup.vue';
+  import { useStore } from 'vuex';
 
+  const store = useStore();
 
   const deletingPhoto = ref(false)
 
-  const isLoading = ref(false)
+  const photoIsLoading = ref (true)
 
   var deletePhotoFunc = () => {};
 
   const dialogVisible = ref(false)
 
-  const imageGroups= ref([
-    {
-    "name": "202307",
-    "images": [
-      {
-        "id": 1,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-    },
-    {
-    "id": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  },
-  {
-        "id": 1,
-        "url": ""
-    },
-    {
-    "id": 2,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  }
-]
-  }
-  ,
-  {
-    "name": "202308",
-    "images": [{
-        "id": 3,
-        "url": ""
-    },
-    {
-    "id": 4,
-    "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-  }]
-  }])
+  const imageGroups= ref()
   
-  const selectionValue = ref('date')
+  const selectionValue = ref(1)
 
-<<<<<<< HEAD
-  const deleteSpecificPhoto = () => {
+  const deleteSpecificPhoto = async () => {
     deletingPhoto.value = true
-    setTimeout(()=> {
-      deletePhotoFunc();
-      deletingPhoto.value = false
-      dialogVisible.value = false;
-      successMessage('photo successfully deleted!')
-    }, 500)
+    await deletePhotoFunc();
+    deletingPhoto.value = false
+    dialogVisible.value = false
   }
 
-  const viewDetail = (photoId, photoSrc, deletePhoto) => {
+  const photoUrl = ref()
+
+  const viewDetail = async (photoId, photoSrc, deletePhoto) => {
     dialogVisible.value = true
     deletePhotoFunc = deletePhoto
-    photoDetail.url = photoSrc
-    photoDetail.isLoading = true
-    setTimeout(()=>{
-      photoDetail.isLoading = false
-    }, 1000)
-    //request
+    photoUrl.value = photoSrc
+    photoIsLoading.value = true
+    try {
+      const res = await axios.post('http://localhost:8080/images/detail', {
+        'imageId' : photoId
+        },  {
+        headers :  {
+            'Content-Type'  : 'Application/json',
+            'Authorization' :  store.state.user.token
+          }
+        }
+      )
+      photoDetail.value = res.data
+      photoIsLoading.value = false
+    } catch (error) {
+      ElMessage.error(error.message)
+    }
   }
 
-  const successMessage = (msg) => {
-    ElMessage({
-    message: msg,
-    type: 'success',
-  })
-  }
+  const isLoading = ref(true)
 
-  const photoDetail = reactive( {
-    'isLoading' : true,
-    'url' : 'https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg',
-    'date' : '2023.8.26',
-    'width'  : '512 px',
-    'height'  : '512px',
-    'size'  : '24B',
-    'format' : 'jpeg'
+  const photoDetail = ref( {
   })
 
-=======
->>>>>>> 7fc4b98 (sidebar added)
   watch(selectionValue,async (value) => {
-    console.log(value);
     isLoading.value = true;
-    setTimeout(() => {
-        isLoading.value = false
-    }, 2000);
+    console.log(value);
+    try {
+      const res = await fetch('http://localhost:8080/images/classification', 
+      {
+        method : 'POST',
+        body : JSON.stringify({
+        'classificationType' : value
+        }),
+        headers : {
+            'Content-Type'  : 'Application/json',
+            'Authorization' :  store.state.user.token
+          }
+      });
+      const data = await res.json();
+      if (data.code) {
+        imageGroups.value = data.data;
+      } else {
+        imageGroups.value = [];
+        ElMessage.error(data.msg);
+      }
+      isLoading.value = false
+    } catch (error) {
+      ElMessage.error(error)
+    }
   }, {immediate:true})
   
   const options = [
     {
-      value: 'date',
+      value: 1,
       label: 'By date',
     },
     {
-      value: 'location',
+      value: 2,
       label: 'By location',
     },
-    {
-<<<<<<< HEAD
-      value: 'format',
+    { value: 3,
       label: 'By format',
     },
     {
-=======
->>>>>>> 7fc4b98 (sidebar added)
-      value: 'ai',
+      value: 4,
       label: 'AI powered',
     },
   ]
   </script>
-<<<<<<< HEAD
 
   <style scoped>
   #deleteButton {
@@ -207,11 +176,12 @@
   }
   .el-main {
     background-color: #fff;
+    min-height: 70vh;
     color: #000;
   }
   .el-header {
     background-color: #fff;
-    margin-bottom: -40px;
+    margin-bottom: 10px;
     margin-right: 30px;
     margin-top: 15px;
   }
@@ -227,6 +197,3 @@
   }
 
 </style>
-=======
-  
->>>>>>> 7fc4b98 (sidebar added)
