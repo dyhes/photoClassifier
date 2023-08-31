@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/SignUpView.vue')
     },
     {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('../views/ForgotPassword.vue')
+    },
+    {
       path: '/upload',
       name: 'upload',
       component: () => import('../views/UploadView.vue'),
@@ -23,6 +28,12 @@ const router = createRouter({
       path: '/classification',
       name: 'classification',
       component: () => import('../views/ClassificationView.vue'),
+      meta: { requiresAuth: true }, 
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('../views/userView.vue'),
       meta: { requiresAuth: true }, 
     }
   ]
