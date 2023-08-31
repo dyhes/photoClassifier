@@ -13,6 +13,7 @@ const userStatus = computed(() => ({
   isOnline: store.state.user.isOnline === null ? false : store.state.user.isOnline,
   userName: store.state.user.userName,
   avatarUrl: store.state.user.avatarUrl,
+  token: store.state.user.token
 }));
 
 // 用户名下拉菜单选择事件
@@ -24,6 +25,7 @@ const handleCommand = (command) => {
       isOnline: false,
       userName: null,
       avatarUrl: null,
+      token: null
     });
 		router.push('/signin');
 	} else if (command == 'user') {
