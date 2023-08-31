@@ -26,10 +26,12 @@
 					<el-button type="primary" @click="submitForm(login)">登录</el-button>
 				</div>
                 <div class="signup">
-                    <!-- <p class="login-tips">没有账号？</p> -->
-    				<!-- <router-link class="signup-btn" to="/signup">注册</router-link> -->
-                    <!-- <el-button class="signup-btn" @click="signUpFrom()">注册</el-button> -->
-                </div>
+                    <p class="login-tips">没有账号？</p>
+    				<router-link class="signup-btn" to="/signup">注册 </router-link>
+
+					<p class="f-pwd-info">忘记密码？</p>
+    				<router-link class="signup-btn" to="/forgot-password">改密码</router-link>
+				</div>
 			</el-form>
 		</div>
 	</div>
@@ -65,14 +67,13 @@ const rules: FormRules = {
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
 const login = ref<FormInstance>();
-
 const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('https://localhost:8080/login', {
+                const response = await fetch('http://localhost:8080/users/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -85,12 +86,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 if (data.code === true) {
 					const token = localStorage.setItem('token', data.data.token);
 					// console.log(data.data.token);
+
+                    ElMessage.success('登录成功');
                     store.dispatch('setUser', {
                         isOnline: true,
                         userName: param.username,
                         avatarUrl: 'profile.jpg',
 						token: token
                     });
+                    router.push('/upload');
                 } else {
                     ElMessage.error('登录失败');
                 }
@@ -103,9 +107,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         }
     });
 };
-// const signUpFrom = () => {
-// 	router.push('/signup');
-// }
 </script>
 
 <style scoped>
@@ -131,8 +132,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	width: 350px;
-	margin: -140px 0 0 -175px;
+    width: 380px;
+    margin: -140px 0 0 -185px;
 	border-radius: 5px;
 	background: #ffffff;
 	overflow: hidden;
@@ -150,18 +151,24 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 	margin-bottom: 10px;
 }
 .login-tips {
-	font-size: 12px;
-	line-height: 30px;
+	margin-top: 5px;
 	color: #000;
     text-align: center;
+}
+.f-pwd-info {
+	margin-top: 5px;
+	margin-left: 30px;
+	color: #000;
 }
 .signup {
     display: flex;
     justify-content: center;
 }
 .signup-btn {
+	margin-top: 5px;
     color: #337ecc;
     border: none;
+	text-decoration: none;
 }
 .el-message {
   position: absolute !important;
