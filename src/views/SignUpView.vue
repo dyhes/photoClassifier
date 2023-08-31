@@ -33,9 +33,12 @@
                     <el-button type="primary" @click="submitForm(signup)">注册</el-button>
                 </div>
                 <div class="signin">
-                    <p class="login-tips">已有账号？</p>
-                    <el-button class="signin-btn" @click="signInForm()">登录</el-button>
-                </div>
+                    <p class="login-tips">有账号？</p>
+    				<router-link class="signup-btn" to="/signin">登陆 </router-link>
+
+					<p class="f-pwd-info">忘记密码？</p>
+    				<router-link class="f-pwd" to="/forgot-password">忘记密码</router-link>
+				</div>
             </el-form>
         </div>
     </div>
@@ -54,7 +57,6 @@ interface SignupInfo {
     email: string;
     password: string;
 }
-const store = useStore();
 const router = useRouter();
 const param = reactive<SignupInfo>({
     username: 'Jay',
@@ -84,12 +86,13 @@ const rules: FormRules = {
     ],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
+const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('https://localhost:8080/signup', {
+                const response = await fetch('http://localhost:8080/users/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -100,8 +103,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
+					const token = localStorage.getItem('token', data.data.token);
+                    store.dispatch('setUser', {
+                        isOnline: null,
+                        userName: null,
+                        avatarUrl: null,
+						token: null
+                    });
                     ElMessage.success('注册成功');
-                    router.push('/');
+                    router.push('/signin');
                 } else {
                     ElMessage.error('注册失败');
                 }
@@ -113,10 +123,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             ElMessage.error('请输入正确的信息');
         }
     });
-};
-
-const signInForm = () => {
-    router.push('/signin');
 };
 
 </script>
@@ -149,8 +155,8 @@ const signInForm = () => {
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	width: 350px;
-	margin: -160px 0 0 -175px;
+    width: 380px;
+    margin: -140px 0 0 -185px;
 	border-radius: 5px;
 	background: #ffffff;
 	overflow: hidden;
@@ -168,8 +174,7 @@ const signInForm = () => {
 	margin-bottom: 10px;
 }
 .login-tips {
-	font-size: 12px;
-	line-height: 30px;
+	margin-top: 5px;
 	color: #000;
     text-align: center;
 }
@@ -178,11 +183,30 @@ const signInForm = () => {
     justify-content: center;
 }
 .signin-btn {
+	margin-top: 5px;
     color: #337ecc;
     border: none;
+	text-decoration: none;
 }
 .el-aside {
     display: none !important;
+}
+.f-pwd {
+	margin-top: 5px;
+    color: #337ecc;
+    border: none;
+	text-decoration: none;
+}
+.f-pwd-info {
+	margin-top: 5px;
+	margin-left: 30px;
+	color: #000;
+}
+.signup-btn {
+	margin-top: 5px;
+    color: #337ecc;
+    border: none;
+	text-decoration: none;
 }
 
 </style>
