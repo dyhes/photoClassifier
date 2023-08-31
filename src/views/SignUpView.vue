@@ -29,6 +29,17 @@
                         </template>
                     </el-input>
                 </el-form-item>
+                <el-form-item prop="confirmPassword">
+                    <el-input
+                        type="password"
+                        placeholder="confirm password"
+                        v-model="param.confirmPassword"
+                    >
+                        <template #prepend>
+                            <el-button :icon="Lock"></el-button>
+                        </template>
+                    </el-input>
+                </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm(signup)">注册</el-button>
                 </div>
@@ -56,12 +67,15 @@ interface SignupInfo {
     username: string;
     email: string;
     password: string;
+    confirmPassword: string;
+
 }
 const router = useRouter();
 const param = reactive<SignupInfo>({
     username: 'Jay',
     email: 'jay@mail.com',
-    password: '123456'
+    password: '123456',
+    confirmPassword: '123456'
 });
 
 const rules: FormRules = {
@@ -84,9 +98,26 @@ const rules: FormRules = {
             trigger: ['blur', 'change']
         }
     ],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    confirmPassword: [
+        {
+            required: true,
+            message: '请确认密码',
+            trigger: 'blur'
+        },
+        {
+            validator: (rule, value, callback) => {
+                if (value !== param.password) {
+                    callback(new Error('密码不匹配'));
+                } else {
+                    callback();
+                }
+            },
+            trigger: 'blur'
+        }
+    ]
 };
-const store = useStore();
+const signup = ref<FormInstance>();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid: boolean) => {
@@ -104,12 +135,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-                    store.dispatch('setUser', {
-                        isOnline: null,
-                        userName: null,
-                        avatarUrl: null,
-						token: null
-                    });
                     ElMessage.success('注册成功');
                     router.push('/signin');
                 } else {
@@ -156,7 +181,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 	left: 50%;
 	top: 50%;
     width: 380px;
-    margin: -140px 0 0 -185px;
+    margin: -170px 0 0 -185px;
 	border-radius: 5px;
 	background: #ffffff;
 	overflow: hidden;
