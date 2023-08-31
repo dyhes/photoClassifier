@@ -33,11 +33,16 @@ const handleCommand = (command) => {
 		router.push('/user');
 	}
 };
+
+setTimeout(()=>{
+  userStatus.isOnline = true;
+}, 2000);
+
 </script>
 
 <template>
   <div v-if="userStatus.isOnline">
-    <el-container class = 'container'>
+    <el-container>
       <div class="header">
         <div class="header-right">
           <div class="header-user-con">
@@ -75,10 +80,6 @@ const handleCommand = (command) => {
 
 <style scoped>
 .el-container {
-  padding: 0px !important;
-  margin: 0px !important;
-}
-.container {
   padding: 0px !important;
   margin: 0px !important;
   height: 100vh;
