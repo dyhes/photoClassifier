@@ -69,7 +69,7 @@ const handleCommand = (command) => {
     </el-container>
   </div>
   <div v-else class="container">
-    <SignInView/> 
+    <RouterView/> 
     </div>
 </template>
 
