@@ -72,7 +72,7 @@ const rules: FormRules = {
         }
     ],
 };
-const login = ref<FormInstance>();
+const forgotPassword = ref<FormInstance>();
 const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
@@ -91,6 +91,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
                 if (data.code === true) {
                     // Store the token in localStorage
+                    //这样写行不通！！！
 					const token = localStorage.setItem('token', data.data.token);
 					// console.log(data.data.token);
                     ElMessage.success('登录成功');
@@ -100,7 +101,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                         avatarUrl: 'profile.jpg',
 						token: token
                     });
-                    router.push('/upload');
+                    router.push('/');
                 } else {
                     ElMessage.error('登录失败');
                 }

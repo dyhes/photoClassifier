@@ -93,7 +93,20 @@ app.post('/images/detail', (req, res) => {
     res.json({
         code: true,
         msg: 'sucess',
-        data: null
+        data: {
+            "imageId": 15,
+            "imageName": "北理桥.jpg",
+            "imageType": "jpeg",
+            "imageSize": 3821734,
+            "imagePath": "https://photoclassifierbucket.obs.cn-north-4.myhuaweicloud.com/1bdbc51e-9bb5-4350-8bfe-ae1f82c60e2b.jpg",
+            "imageTag": null,
+            "cameraName": "Xiaomi Redmi K30 Pro",
+            "locationId": null,
+            "address": null,
+            "shootingTime": "2022-10-09T17:32:52",
+            "uploadTime": "2023-08-31T23:08:55",
+            "modifiedTime": "2023-08-31T23:08:54"
+        }
     })
 })
 
@@ -113,27 +126,19 @@ app.post('/images/classification', (req, res) => {
         code: true,
         msg: 'success',
         data: [{
-            "name": "202307",
-            "images": [
+            "category": "202307",
+            "photos": [
               {
-                "id": 1,
+                "photoId": 1,
                 "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
             },
             {
-            "id": 2,
+            "photoId": 2,
             "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
           },
             {
-            "id": 3,
+            "photoId": 3,
             "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-            {
-            "id": 2,
-            "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
-          },
-            {
-            "id": 2,
-            "url": "https://tse4-mm.cn.bing.net/th/id/OIP-C.BAYWkiNM-gPq7MIHKZj8NQHaJ4?pid=ImgDet&rs=1"
           }
         ]
           }
