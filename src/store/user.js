@@ -1,10 +1,10 @@
 import { reactive } from 'vue';
 
 const state = reactive({
-  isOnline: false,
-  userName: null,
-  avatarUrl: null,
-  token: null
+  isOnline:  localStorage.getItem('isOnline'),
+  userName: localStorage.getItem('userName'),
+  avatarUrl: localStorage.getItem('avatarUrl'),
+  token: localStorage.getItem('token')
 });
 
 const mutations = {

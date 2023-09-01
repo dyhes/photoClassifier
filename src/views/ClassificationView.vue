@@ -96,11 +96,9 @@
         }
       )
       photoDetail.value = res.data.data
-      console.log(photoDetail.value)
-      console.log(res.data)
       photoIsLoading.value = false
     } catch (error) {
-      ElMessage.error(error.message)
+      ElMessage.error('获取分类失败，请重试')
     }
   }
 

@@ -41,7 +41,6 @@ setTimeout(()=>{
 </script>
 
 <template>
-  <div v-if="userStatus.isOnline">
     <el-container>
       <div class="header">
         <div class="header-right">
@@ -57,7 +56,7 @@ setTimeout(()=>{
           </div>
         </div>
       </div>
-      <el-aside>
+      <el-aside v-if="userStatus.isOnline">
 		    <div class="logo">BIT Photo Sorter</div>
         <el-row class="avatar">
           <el-avatar :size="125" :src="userStatus.avatarUrl"/>
@@ -67,15 +66,12 @@ setTimeout(()=>{
           <el-text>{{ userStatus.userName }}</el-text>
         </el-row>
         <el-divider class="divider" />
-          <PageLink path = '/upload' linkText = 'Upload'/>
+          <PageLink path = '/' linkText = 'Upload'/>
           <PageLink path = '/classification' linkText = 'Classification'/>
+          <PageLink path = '/search' linkText = 'Search'/>
       </el-aside>
       <el-main><RouterView /></el-main>
     </el-container>
-  </div>
-  <div v-else class="container">
-    <RouterView/> 
-    </div>
 </template>
 
 <style scoped>
