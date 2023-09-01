@@ -3,7 +3,10 @@
       v-model:file-list="fileList"
       class="upload-demo"
       action="http://localhost:8080/images/upload"
-      :headers="header"
+      :headers="
+      {
+        'Authorization' : store.state.user.token
+      }"
       multiple
       drag
       :on-error="handleError"
@@ -31,10 +34,6 @@
 
   const store = useStore();
   
-  const header = {
-    Authorization : store.state.user.token
-  }
-
   const fileList = ref<UploadUserFile[]>([])
 
   const handleError = (err, file, fileList) => {

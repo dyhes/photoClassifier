@@ -3,7 +3,7 @@
   <div class="image-group">
     <el-text>{{ props.groupName }}</el-text>
   <div>
-    <BITPhoto v-for="image in props.images" :key = 'image.id' :photoId="image.id" :photoSrc = 'image.url' :view-detail="viewDetail"/>
+    <BITPhoto v-for="image in props.images" :key = 'image.photoId' :photoId="image.photoId" :photoSrc = 'image.url' :view-detail="viewDetail"/>
   </div>
 </div>
 </template>
