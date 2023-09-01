@@ -84,7 +84,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-					localStorage.setItem('token', 'Bearer ' + data.data);
+					localStorage.setItem('token', data.data);
 					const token = localStorage.getItem('token')
 					// console.log(data.data.token);
 					console.log(token);
