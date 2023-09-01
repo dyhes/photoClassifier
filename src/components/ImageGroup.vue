@@ -1,7 +1,7 @@
 //g
 <template>
   <div class="image-group">
-    <el-text>{{ props.groupName }}</el-text>
+    <el-text v-if = 'props.groupName != null'>{{ props.groupName }}</el-text>
   <div>
     <BITPhoto v-for="image in props.images" :key = 'image.photoId' :photoId="image.photoId" :photoSrc = 'image.url' :view-detail="viewDetail"/>
   </div>
