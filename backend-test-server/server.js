@@ -76,7 +76,7 @@ app.post('/users/signup', (req, res) => {
 
 
 app.post('/images/delete', (req, res) => {
-    const {photoId} = req.body;
+    const {imageId} = req.body;
     console.log('deleting photo');
     console.log(photoId);
     res.json({
