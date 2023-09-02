@@ -16,7 +16,7 @@
       v-loading="isLoading"
     element-loading-text = "loading">
             <ImageGroup  v-for = "imageGroup in imageGroups"
-            :key="imageGroup.name" :group-name="imageGroup.name"   :images="imageGroup.images"  :view-detail="viewDetail"/>
+            :key="imageGroup.category" :group-name="imageGroup.category"   :images="imageGroup.photos"  :view-detail="viewDetail"/>
         <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
@@ -24,11 +24,10 @@
             </el-main>
             <el-aside v-loading = 'photoIsLoading' element-loading-text = "loading details form server">
               <el-descriptions title="Photo Detail" :column = 1>
-              <el-descriptions-item label="imageID">  {{ photoDetail.imageID }}  </el-descriptions-item>
+              <el-descriptions-item label="imageID">  {{ photoDetail.imageId }}  </el-descriptions-item>
               <el-descriptions-item label="imageName"> {{ photoDetail.imageName }}  </el-descriptions-item>
               <el-descriptions-item label="imageType"> {{ photoDetail.imageType }} </el-descriptions-item>
               <el-descriptions-item label="imageSize">{{ photoDetail.imageSize }}</el-descriptions-item>
-              <el-descriptions-item label="imagePath"> {{ photoDetail.imagePath }}  </el-descriptions-item>
               <el-descriptions-item label="imageTag">  {{ photoDetail.imageTag }}  </el-descriptions-item>
               <el-descriptions-item label="cameraName"> {{ photoDetail.cameraName }}  </el-descriptions-item>
               <el-descriptions-item label="address"> {{ photoDetail.address }} </el-descriptions-item>
@@ -96,10 +95,10 @@
           }
         }
       )
-      photoDetail.value = res.data
+      photoDetail.value = res.data.data
       photoIsLoading.value = false
     } catch (error) {
-      ElMessage.error(error.message)
+      ElMessage.error('获取分类失败，请重试')
     }
   }
 
@@ -126,6 +125,8 @@
       const data = await res.json();
       if (data.code) {
         imageGroups.value = data.data;
+        console.log(data.data);
+        console.log(imageGroups);
       } else {
         imageGroups.value = [];
         ElMessage.error(data.msg);
