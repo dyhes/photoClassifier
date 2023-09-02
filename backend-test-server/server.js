@@ -76,7 +76,7 @@ app.post('/users/signup', (req, res) => {
 
 
 app.post('/images/delete', (req, res) => {
-    const {photoId} = req.body;
+    const {imageId} = req.body;
     console.log('deleting photo');
     console.log(photoId);
     res.json({
@@ -87,9 +87,9 @@ app.post('/images/delete', (req, res) => {
 })
 
 app.post('/images/detail', (req, res) => {
-    const {photoId} = req.body;
+    const {imageId} = req.body;
     console.log('querying photo detail');
-    console.log(photoId);
+    console.log(imageId);
     res.json({
         code: true,
         msg: 'sucess',
@@ -118,6 +118,38 @@ app.post('/images/upload', (req, res) => {
     })
 })
 
+app.post('/images/tag', (req, res) => {
+    console.log('tag')
+    res.json({
+        code: true,
+        msg: 'success',
+        data: {
+            'tagList':  ['a',   'bbbbbbbbbbbbbbb',  'cccccc',   'human',    'animal',   'food', 'shark']
+        }
+    })
+})
+
+app.post('/images/search', (req, res) => {
+    console.log('search');
+    console.log(req.body);
+    res.json({
+        code: true,
+        msg: 'success',
+        data: {
+                "photos": [
+                    {
+                        "photoId": 1,
+                        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+                    },
+                    {
+                    "photoId": 2,
+                    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+                  },
+                ]
+        }
+    })
+})
+
 app.post('/images/classification', (req, res) => {
     const {classificationType} = req.body;
     console.log('querying classification');
@@ -126,7 +158,7 @@ app.post('/images/classification', (req, res) => {
         code: true,
         msg: 'success',
         data: [{
-            "category": "202307",
+            "category": null,
             "photos": [
               {
                 "photoId": 1,
@@ -139,7 +171,31 @@ app.post('/images/classification', (req, res) => {
             {
             "photoId": 3,
             "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          }
+          },
+          {
+            "photoId": 1,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+        },
+        {
+        "photoId": 2,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+        {
+        "photoId": 3,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+      {
+        "photoId": 1,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+    },
+    {
+    "photoId": 2,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  },
+    {
+    "photoId": 3,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  }
         ]
           }
           ]
