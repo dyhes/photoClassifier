@@ -18,12 +18,12 @@
           </el-input>
         </el-form-item>
         <div v-if="verificationCodeSent" class="verification-code">
-          <el-input v-model="verificationCode" placeholder="Verification Code">
+          <el-input v-model="verificationCode" placeholder="Enter Verification Code" class="v-code">
             <template #prepend>
               <el-button :icon="Lock"></el-button>
             </template>
           </el-input>
-          <el-input v-if="showNewPassword" v-model="newPassword" placeholder="Enter New Password">
+          <el-input v-if="showNewPassword" v-model="newPassword" placeholder="Enter New Password" type="password" class="n-pass">
             <template #prepend>
               <el-button :icon="Lock"></el-button>
             </template>
@@ -84,9 +84,12 @@ const rules: FormRules = {
       trigger: ['blur', 'change'],
     },
   ],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
 
+const store = useStore();
 const forgotPassword = ref<FormInstance>();
+const verificationCodeFromApi = ref('');
 const verificationCode = ref('');
 const verificationCodeSent = ref(false);
 const newPassword = ref('');
@@ -108,6 +111,8 @@ const sendVerificationCode = async () => {
     const data = await response.json();
 
     if (data.code === true) {
+      verificationCodeFromApi.value = data.data;
+      console.log(verificationCodeFromApi.value);
       ElMessage.success('Verification code sent successfully');
       verificationCodeSent.value = true;
       showNewPassword.value = true;
@@ -120,38 +125,36 @@ const sendVerificationCode = async () => {
   }
 };
 
-const login = ref<FormInstance>();
-const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid: boolean) => {
     if (valid) {
       if (showNewPassword.value) {
-        // Check if the entered verification code matches
-        if (verificationCode === data.data) {
-          try {
-            const response = await fetch('http://localhost:8080/users/updatePassword', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
-            });
+            console.log(verificationCodeFromApi.value);
+            console.log(verificationCode.value);
+        if (verificationCode.value === verificationCodeFromApi.value) {
+            try {
+                const response = await fetch('http://localhost:8080/users/updatePassword', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'Application/json',
+                    },
+                    body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.code === true) {
-              ElMessage.success('Password updated successfully');
-              router.push('/signin')
-              // Handle password update success
-              // Redirect to a success page or perform any other action
-            } else {
-              ElMessage.error('Failed to update password');
+                if (data.code === true) {
+                ElMessage.success('Password updated successfully');
+                router.push('/signin')
+                
+                } else {
+                ElMessage.error('Failed to update password');
+                }
+            } catch (error) {
+                console.error('Error updating password:', error);
+                ElMessage.error('Failed to update password');
             }
-          } catch (error) {
-            console.error('Error updating password:', error);
-            ElMessage.error('Failed to update password');
-          }
         } else {
           ElMessage.error('Verification code does not match');
         }
@@ -238,5 +241,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 .el-aside {
 	display: none !important;
+}
+.v-code, .n-pass {
+    margin-bottom: 18px;
 }
 </style>
