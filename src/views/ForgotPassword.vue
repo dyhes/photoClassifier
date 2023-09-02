@@ -23,18 +23,15 @@
               <el-button :icon="Lock"></el-button>
             </template>
           </el-input>
-          <el-input v-if="verificationCodeConfirmed" v-model="newPassword" placeholder="New Password">
+          <el-input v-if="showNewPassword" v-model="newPassword" placeholder="Enter New Password">
             <template #prepend>
               <el-button :icon="Lock"></el-button>
             </template>
           </el-input>
-          <el-button @click="sendVerificationCode" type="primary" :disabled="verificationCodeSent">
-            改密码
-          </el-button>
         </div>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm(forgotPassword)">
-            {{ verificationCodeConfirmed ? 'Submit' : '发验证码' }}
+            {{ showNewPassword ? 'Submit' : '获取验证码' }}
           </el-button>
         </div>
         <div class="signup">
@@ -49,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -92,19 +89,18 @@ const rules: FormRules = {
 const forgotPassword = ref<FormInstance>();
 const verificationCode = ref('');
 const verificationCodeSent = ref(false);
-const verificationCodeConfirmed = ref(false);
 const newPassword = ref('');
-const store = useStore();
+const showNewPassword = ref(false);
 
 // Send the verification code
-const sendVerificationCode = async (formEl: FormInstance | undefined) => {
+const sendVerificationCode = async () => {
   if (verificationCodeSent.value) return;
 
   try {
     const response = await fetch('http://localhost:8080/users/forgetPassword', {
       method: 'POST',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'Application/json',
       },
       body: JSON.stringify(param),
     });
@@ -114,6 +110,7 @@ const sendVerificationCode = async (formEl: FormInstance | undefined) => {
     if (data.code === true) {
       ElMessage.success('Verification code sent successfully');
       verificationCodeSent.value = true;
+      showNewPassword.value = true;
     } else {
       ElMessage.error('Failed to send verification code');
     }
@@ -123,40 +120,46 @@ const sendVerificationCode = async (formEl: FormInstance | undefined) => {
   }
 };
 
-
+const login = ref<FormInstance>();
+const store = useStore();
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid: boolean) => {
     if (valid) {
-      if (verificationCodeConfirmed.value) {
-        try {
-          const response = await fetch('http://localhost:8080/users/updatePassword', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-            body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
-          });
+      if (showNewPassword.value) {
+        // Check if the entered verification code matches
+        if (verificationCode === data.data) {
+          try {
+            const response = await fetch('http://localhost:8080/users/updatePassword', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
+            });
 
-          const data = await response.json();
+            const data = await response.json();
 
-          if (data.code === true) {
-            ElMessage.success('Password updated successfully');
-            router.push('/signin');
-            // Handle password update success
-            // Redirect to a success page or perform any other action
-          } else {
+            if (data.code === true) {
+              ElMessage.success('Password updated successfully');
+              router.push('/signin')
+              // Handle password update success
+              // Redirect to a success page or perform any other action
+            } else {
+              ElMessage.error('Failed to update password');
+            }
+          } catch (error) {
+            console.error('Error updating password:', error);
             ElMessage.error('Failed to update password');
           }
-        } catch (error) {
-          console.error('Error updating password:', error);
-          ElMessage.error('Failed to update password');
+        } else {
+          ElMessage.error('Verification code does not match');
         }
       } else {
-        sendVerificationCode(forgotPassword);
+        sendVerificationCode();
       }
     } else {
-      ElMessage.error('Please enter new password and verification code');
+      ElMessage.error('Please enter correct username and verification code');
     }
   });
 };
