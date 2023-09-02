@@ -29,7 +29,7 @@
             </template>
           </el-input>
           <el-button @click="sendVerificationCode" type="primary" :disabled="verificationCodeSent">
-            {{ countdown > 0 ? `${countdown}s` : '发验证码' }}
+            改密码
           </el-button>
         </div>
         <div class="login-btn">
@@ -94,7 +94,7 @@ const verificationCode = ref('');
 const verificationCodeSent = ref(false);
 const verificationCodeConfirmed = ref(false);
 const newPassword = ref('');
-const countdown = ref(90);
+const store = useStore();
 
 // Send the verification code
 const sendVerificationCode = async (formEl: FormInstance | undefined) => {
@@ -114,17 +114,6 @@ const sendVerificationCode = async (formEl: FormInstance | undefined) => {
     if (data.code === true) {
       ElMessage.success('Verification code sent successfully');
       verificationCodeSent.value = true;
-
-      // Start countdown
-      let remainingTime = countdown.value;
-      const countdownInterval = setInterval(() => {
-        remainingTime--;
-        countdown.value = remainingTime;
-        if (remainingTime <= 0) {
-          clearInterval(countdownInterval);
-          verificationCodeSent.value = false;
-        }
-      }, 1000);
     } else {
       ElMessage.error('Failed to send verification code');
     }
@@ -134,8 +123,7 @@ const sendVerificationCode = async (formEl: FormInstance | undefined) => {
   }
 };
 
-// const login = ref<FormInstance>();
-const store = useStore();
+
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async (valid: boolean) => {
@@ -168,7 +156,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         sendVerificationCode(forgotPassword);
       }
     } else {
-      ElMessage.error('Please enter correct username and verification code');
+      ElMessage.error('Please enter new password and verification code');
     }
   });
 };
