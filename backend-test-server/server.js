@@ -122,6 +122,7 @@ app.post('/users/updatePassword', (req, res) => {
     if (userIndex !== -1) {
         users[userIndex].password = newPassword;
     }
+
     res.json({
         code: true,
         msg: 'password updated',
@@ -129,6 +130,40 @@ app.post('/users/updatePassword', (req, res) => {
     });
 });
 
+// Modify Password API endpoint
+app.post('/users/modifyPassword', (req, res) => {
+    const { id, password, newPassword } = req.body;
+    // Find the user by ID (you should use a database for this)
+    const user = users.find(user => user.password === password);
+
+    if (!user) {
+        res.json({
+            code: false,
+            msg: 'user not found',
+            data: null
+        });
+        return;
+    }
+
+    // Check if the provided current password matches the stored password
+    if (user.password !== password) {
+        res.json({
+            code: false,
+            msg: 'invalid password',
+            data: null
+        });
+        return;
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+
+    res.json({
+        code: true,
+        msg: 'password updated',
+        data: null
+    });
+});
 
 app.post('/images/delete', (req, res) => {
     const {imageId} = req.body;
@@ -180,27 +215,6 @@ app.post('/images/tag', (req, res) => {
         msg: 'success',
         data: {
             'tagList':  ['a',   'bbbbbbbbbbbbbbb',  'cccccc',   'human',    'animal',   'food', 'shark']
-        }
-    })
-})
-
-app.post('/images/search', (req, res) => {
-    console.log('search');
-    console.log(req.body);
-    res.json({
-        code: true,
-        msg: 'success',
-        data: {
-                "photos": [
-                    {
-                        "photoId": 1,
-                        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-                    },
-                    {
-                    "photoId": 2,
-                    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-                  },
-                ]
         }
     })
 })

@@ -6,31 +6,21 @@
       </div>
       <div class="card-right">
         <h1 class="msg">{{ userStatus.userName }}'s Account details</h1>
-        <form>
+        <p class="info"><b>Username:</b> {{ userStatus.userName }}</p>
+        <p class="info"><b>Password:</b> ******</p>
+        <form @submit.prevent="savePassword">
           <div class="input-container">
-            <label>Username:</label>
-            <input v-if="!editingUserName" :value="editedUser.userName" disabled />
-            <div v-else>
-              <input v-model="editedUser.userName" />
-              <button @click="saveUserName">Save</button>
-              <button @click="cancelEdit('userName')">Cancel</button>
-            </div>
-            <button v-if="!editingUserName" @click="editingUserName = true">Edit</button>
-          </div>
-
-          <div class="input-container">
-            <label>Password:</label>
-            <input
-              v-if="!editingPassword"
-              :value="editedUser.password ? '********' : ''"
-              disabled
-            />
-            <div v-else>
+            <button v-if="!editingPassword" @click="editingPassword = true">Change Password</button>
+            <div v-if="editingPassword">
+              <label>Old Password:</label>
               <input v-model="editedUser.password" type="password" />
-              <button @click="savePassword">Save</button>
-              <button @click="cancelEdit('password')">Cancel</button>
+              <label>New Password:</label>
+              <input v-model="editedUser.newPassword" type="password" />
             </div>
-            <button v-if="!editingPassword" @click="editingPassword = true">Edit</button>
+            <div class="buttons">
+                <button v-if="editingPassword" type="submit">保存</button>
+                <button v-if="editingPassword" @click="cancelEdit('password')">取消</button>
+            </div>
           </div>
         </form>
       </div>
@@ -41,6 +31,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import { ElMessage } from 'element-plus';
 
 const store = useStore();
 const userStatus = computed(() => ({
@@ -51,28 +42,53 @@ const userStatus = computed(() => ({
 }));
 
 const editedUser = ref({
-  userName: userStatus.value.userName,
-  password: ''
+  password: '',
+  newPassword: ''
 });
 
-let editingUserName = ref(false);
 let editingPassword = ref(false);
 
-const saveUserName = () => {
-  userStatus.value.userName = editedUser.userName;
-  editingUserName.value = false;
-};
-
 const savePassword = () => {
-  editingPassword.value = false;
+  // Check if the password fields are not empty
+  if (editedUser.value.password === '' || editedUser.value.newPassword === '') {
+    ElMessage.error('Please fill in both password fields');
+    return;
+  }
+
+  const dataToSend = {
+    id: 1,
+    password: editedUser.value.password,
+    newPassword: editedUser.value.newPassword
+  };
+
+  // API request to change the password
+  fetch('http://localhost:8080/users/modifyPassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dataToSend),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.code === true) {
+        editingPassword.value = false;
+        ElMessage.success('Password changed successfully');
+      } else {
+        editingPassword.value = true;
+        ElMessage.error('Invalid old password');
+        console.error('Password change failed:', data.msg);
+      }
+    })
+    .catch(error => {
+      editingPassword.value = true;
+      ElMessage.error('Error while changing password');
+      console.error('Error while changing password:', error);
+    });
 };
 
 const cancelEdit = (field) => {
-  editingUserName.value = false;
   editingPassword.value = false;
-  if (field === 'userName') {
-    editedUser.userName = userStatus.value.userName;
-  }
 };
 </script>
 
@@ -81,13 +97,13 @@ const cancelEdit = (field) => {
   display: flex;
   box-shadow: 0 0 2rem rgba(0,0,0,.14)!important;
   border-radius: 1.3rem;
-  height: 300px;
+  height: 350px;
   width: 100%;
   margin: 30px;
 }
 
 .card-left {
-  width: 300px;
+  width: 350px;
   padding: 20px;
 }
 
@@ -98,7 +114,7 @@ const cancelEdit = (field) => {
 }
 
 .user-img {
- width: 260px;
+ width: 310px;
  border-radius: 1.2rem;
 }
 
@@ -137,11 +153,11 @@ button {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
-  margin-top: 40px;
+  
 }
 
 .input-container label {
-  width: 120px;
+  width: 150px;
   font-size: 20px;
 }
 
@@ -151,6 +167,17 @@ button {
 }
 
 .input-container button {
-  margin-left: 10px;
+  
+}
+.buttons {
+    margin-top: 110px;
+}
+.buttons button {
+    margin-right: 10px;
+}
+.info {
+    font-size: 20px;
+    margin: 0;
+    margin-top: 10px;
 }
 </style>

@@ -4,6 +4,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+        path: '/',
+        redirect: '/signin',
+    },
+    {
       path: '/signin',
       name: 'signin',
       component: () => import('../views/SignInView.vue'),
@@ -44,6 +48,10 @@ const router = createRouter({
       name: 'search',
       component: () => import('../views/SearchView.vue'),
       meta: { requiresAuth: true }, 
+    },
+    {
+        path: '/:catchAll(.*)',
+        component: () => import('../views/404.vue'),
     }
   ]
 })
