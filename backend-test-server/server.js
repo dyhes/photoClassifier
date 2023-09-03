@@ -158,7 +158,48 @@ app.post('/images/classification', (req, res) => {
         code: true,
         msg: 'success',
         data: [{
-            "category": null,
+            "category": 'a',
+            "photos": [
+              {
+                "photoId": 1,
+                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+            },
+            {
+            "photoId": 2,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+            {
+            "photoId": 3,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+          {
+            "photoId": 1,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+        },
+        {
+        "photoId": 2,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+        {
+        "photoId": 3,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+      {
+        "photoId": 1,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+    },
+    {
+    "photoId": 2,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  },
+    {
+    "photoId": 3,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  }
+        ]
+          }, 
+          {
+            "category": 'b',
             "photos": [
               {
                 "photoId": 1,
