@@ -1,39 +1,52 @@
 <template>
-	<div class="forget-pass-wrap">
-		<div class="ms-fpwd">
-			<div class="ms-title">照片分类系统 -  忘记密码</div>
-			<el-form :model="param" :rules="rules" ref="forgotPassword" label-width="0px" class="ms-content">
-				<el-form-item prop="username">
-					<el-input v-model="param.username" placeholder="username">
-						<template #prepend>
-							<el-button :icon="User"></el-button>
-						</template>
-					</el-input>
-				</el-form-item>
-                <el-form-item prop="email">
-                    <el-input v-model="param.email" placeholder="email">
-                        <template #prepend>
-                            <el-button :icon="User"></el-button>
-                        </template>
-                    </el-input>
-                </el-form-item>
-				<div class="login-btn">
-					<el-button type="primary" @click="submitForm(forgotPassword)">登录</el-button>
-				</div>
-                <div class="signup">
-                    <p class="login-tips">记得密码？</p>
-    				<router-link class="signin-btn" to="/signin">登陆 </router-link>
-
-					<p class="signup-tips">没有账户？</p>
-    				<router-link class="signup-btn" to="/signup">注册</router-link>
-				</div>
-			</el-form>
-		</div>
-	</div>
+  <div class="forget-pass-wrap">
+    <div class="ms-fpwd">
+      <div class="ms-title">照片分类系统 - 忘记密码</div>
+      <el-form :model="param" :rules="rules" ref="forgotPassword" label-width="0px" class="ms-content">
+        <el-form-item prop="username">
+          <el-input v-model="param.username" placeholder="username">
+            <template #prepend>
+              <el-button :icon="User"></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="email">
+          <el-input v-model="param.email" placeholder="email">
+            <template #prepend>
+              <el-button :icon="User"></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <div v-if="verificationCodeSent" class="verification-code">
+          <el-input v-model="verificationCode" placeholder="Enter Verification Code" class="v-code">
+            <template #prepend>
+              <el-button :icon="Lock"></el-button>
+            </template>
+          </el-input>
+          <el-input v-if="showNewPassword" v-model="newPassword" placeholder="Enter New Password" type="password" class="n-pass">
+            <template #prepend>
+              <el-button :icon="Lock"></el-button>
+            </template>
+          </el-input>
+        </div>
+        <div class="login-btn">
+          <el-button type="primary" @click="submitForm(forgotPassword)">
+            {{ showNewPassword ? 'Submit' : '获取验证码' }}
+          </el-button>
+        </div>
+        <div class="signup">
+          <p class="login-tips">记得密码?</p>
+          <router-link class="signin-btn" to="/signin">登陆</router-link>
+          <p class="signup-tips">没有账户?</p>
+          <router-link class="signup-btn" to="/signup">注册</router-link>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -41,81 +54,120 @@ import { Lock, User } from '@element-plus/icons-vue';
 import { useStore } from 'vuex';
 
 interface LoginInfo {
-    username: string;
-    email: string;
+  username: string;
+  email: string;
 }
 
 const router = useRouter();
 const param = reactive<LoginInfo>({
-    username: 'Jay',
-    email: 'jay@mail.com'
+  username: 'Jay',
+  email: 'jay@mail.com',
 });
 
 const rules: FormRules = {
-    username: [
-        {
-            required: true,
-            message: '请输入用户名',
-            trigger: 'blur'
-        }
-    ],
-    email: [
-        {
-            required: true,
-            message: '请输入邮箱',
-            trigger: 'blur'
-        },
-        {
-            type: 'email',
-            message: '请输入有效的邮箱地址',
-            trigger: ['blur', 'change']
-        }
-    ],
+  username: [
+    {
+      required: true,
+      message: 'Please enter your username',
+      trigger: 'blur',
+    },
+  ],
+  email: [
+    {
+      required: true,
+      message: 'Please enter your email',
+      trigger: 'blur',
+    },
+    {
+      type: 'email',
+      message: 'Please enter a valid email address',
+      trigger: ['blur', 'change'],
+    },
+  ],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 };
-const forgotPassword = ref<FormInstance>();
+
 const store = useStore();
+const forgotPassword = ref<FormInstance>();
+const verificationCodeFromApi = ref('');
+const verificationCode = ref('');
+const verificationCodeSent = ref(false);
+const newPassword = ref('');
+const showNewPassword = ref(false);
+
+// Send the verification code
+const sendVerificationCode = async () => {
+  if (verificationCodeSent.value) return;
+
+  try {
+    const response = await fetch('http://localhost:8080/users/forgetPassword', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/json',
+      },
+      body: JSON.stringify(param),
+    });
+
+    const data = await response.json();
+
+    if (data.code === true) {
+      verificationCodeFromApi.value = data.data;
+      console.log(verificationCodeFromApi.value);
+      ElMessage.success('Verification code sent successfully');
+      verificationCodeSent.value = true;
+      showNewPassword.value = true;
+    } else {
+      ElMessage.error('Failed to send verification code');
+    }
+  } catch (error) {
+    console.error('Error sending verification code:', error);
+    ElMessage.error('Failed to send verification code');
+  }
+};
+
 const submitForm = async (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.validate(async (valid: boolean) => {
-        if (valid) {
+  if (!formEl) return;
+  formEl.validate(async (valid: boolean) => {
+    if (valid) {
+      if (showNewPassword.value) {
+            console.log(verificationCodeFromApi.value);
+            console.log(verificationCode.value);
+        if (verificationCode.value === verificationCodeFromApi.value) {
             try {
-                const response = await fetch('http://localhost:8080/users/forgetPassword', {
+                const response = await fetch('http://localhost:8080/users/updatePassword', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'Application/json',
                     },
-                    body: JSON.stringify(param)
+                    body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
                 });
 
                 const data = await response.json();
 
                 if (data.code === true) {
-                    // Store the token in localStorage
-                    //这样写行不通！！！
-					const token = localStorage.setItem('token', data.data.token);
-					// console.log(data.data.token);
-                    ElMessage.success('登录成功');
-                    store.dispatch('setUser', {
-                        isOnline: true,
-                        userName: param.username,
-                        avatarUrl: 'profile.jpg',
-						token: token
-                    });
-                    router.push('/');
+                ElMessage.success('Password updated successfully');
+                router.push('/signin')
+                
                 } else {
-                    ElMessage.error('登录失败');
+                ElMessage.error('Failed to update password');
                 }
             } catch (error) {
-                console.error('Error during login:', error);
-                ElMessage.error('登录失败');
+                console.error('Error updating password:', error);
+                ElMessage.error('Failed to update password');
             }
         } else {
-            ElMessage.error('请输入正确的用户名和密码');
+          ElMessage.error('Verification code does not match');
         }
-    });
+      } else {
+        sendVerificationCode();
+      }
+    } else {
+      ElMessage.error('Please enter correct username and verification code');
+    }
+  });
 };
-
 </script>
+
 
 <style scoped>
 .forget-pass-wrap {
@@ -167,8 +219,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     display: flex;
     justify-content: center;
 }
+.signup-btn {
+    margin: 5px 0 0 10px;
+    text-decoration: none;
+}
 .signin-btn {
 	margin-top: 5px;
+    margin-left: 10px;
     color: #337ecc;
     border: none;
 	text-decoration: none;
@@ -184,5 +241,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 .el-aside {
 	display: none !important;
+}
+.v-code, .n-pass {
+    margin-bottom: 18px;
 }
 </style>
