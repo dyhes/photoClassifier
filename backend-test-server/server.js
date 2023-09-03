@@ -9,7 +9,7 @@ const port = 8080;
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:8080");
+    res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5173");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
@@ -133,7 +133,6 @@ app.post('/users/updatePassword', (req, res) => {
 // Modify Password API endpoint
 app.post('/users/modifyPassword', (req, res) => {
     const { id, password, newPassword } = req.body;
-
     // Find the user by ID (you should use a database for this)
     const user = users.find(user => user.password === password);
 
@@ -165,6 +164,153 @@ app.post('/users/modifyPassword', (req, res) => {
         data: null
     });
 });
+
+app.post('/images/delete', (req, res) => {
+    const {imageId} = req.body;
+    console.log('deleting photo');
+    console.log(imageId);
+    res.json({
+        code: true,
+        msg: 'photo successfully deleted! (msg from backend)',
+        data: null
+    })
+})
+
+app.post('/images/detail', (req, res) => {
+    const {imageId} = req.body;
+    console.log('querying photo detail');
+    console.log(imageId);
+    res.json({
+        code: true,
+        msg: 'sucess',
+        data: {
+            "imageId": 15,
+            "imageName": "北理桥.jpg",
+            "imageType": "jpeg",
+            "imageSize": 3821734,
+            "imagePath": "https://photoclassifierbucket.obs.cn-north-4.myhuaweicloud.com/1bdbc51e-9bb5-4350-8bfe-ae1f82c60e2b.jpg",
+            "imageTag": null,
+            "cameraName": "Xiaomi Redmi K30 Pro",
+            "locationId": null,
+            "address": null,
+            "shootingTime": "2022-10-09T17:32:52",
+            "uploadTime": "2023-08-31T23:08:55",
+            "modifiedTime": "2023-08-31T23:08:54"
+        }
+    })
+})
+
+app.post('/images/upload', (req, res) => {
+    res.json({
+        code: true,
+        msg: 'success',
+        data: null
+    })
+})
+
+app.post('/images/tag', (req, res) => {
+    console.log('tag')
+    res.json({
+        code: true,
+        msg: 'success',
+        data: {
+            'tagList':  ['a',   'bbbbbbbbbbbbbbb',  'cccccc',   'human',    'animal',   'food', 'shark']
+        }
+    })
+})
+
+app.post('/images/classification', (req, res) => {
+    const {classificationType} = req.body;
+    console.log('querying classification');
+    console.log(classificationType);
+    res.json({
+        code: true,
+        msg: 'success',
+        data: [{
+            "category": 'a',
+            "photos": [
+              {
+                "photoId": 1,
+                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+            },
+            {
+            "photoId": 2,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+            {
+            "photoId": 3,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+          {
+            "photoId": 1,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+        },
+        {
+        "photoId": 2,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+        {
+        "photoId": 3,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+      {
+        "photoId": 1,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+    },
+    {
+    "photoId": 2,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  },
+    {
+    "photoId": 3,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  }
+        ]
+          }, 
+          {
+            "category": 'b',
+            "photos": [
+              {
+                "photoId": 1,
+                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+            },
+            {
+            "photoId": 2,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+            {
+            "photoId": 3,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+          },
+          {
+            "photoId": 1,
+            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+        },
+        {
+        "photoId": 2,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+        {
+        "photoId": 3,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+      },
+      {
+        "photoId": 1,
+        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+    },
+    {
+    "photoId": 2,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  },
+    {
+    "photoId": 3,
+    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+  }
+        ]
+          }
+          ]
+    })
+})
 
 const server = http.createServer(app);
 
