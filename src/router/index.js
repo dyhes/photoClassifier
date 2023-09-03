@@ -26,7 +26,7 @@ const router = createRouter({
       meta: { requiresAuth: false }, 
     },
     {
-      path: '/',
+      path: '/upload',
       name: 'upload',
       component: () => import('../views/UploadView.vue'),
       meta: { requiresAuth: true }, 

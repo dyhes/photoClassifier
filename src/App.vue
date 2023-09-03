@@ -66,7 +66,7 @@ setTimeout(()=>{
           <el-text>{{ userStatus.userName }}</el-text>
         </el-row>
         <el-divider class="divider" />
-          <PageLink path = '/' linkText = 'Upload'/>
+          <PageLink path = '/upload' linkText = 'Upload'/>
           <PageLink path = '/classification' linkText = 'Classification'/>
           <PageLink path = '/search' linkText = 'Search'/>
       </el-aside>
