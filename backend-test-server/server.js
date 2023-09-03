@@ -122,6 +122,7 @@ app.post('/users/updatePassword', (req, res) => {
     if (userIndex !== -1) {
         users[userIndex].password = newPassword;
     }
+
     res.json({
         code: true,
         msg: 'password updated',
@@ -129,124 +130,41 @@ app.post('/users/updatePassword', (req, res) => {
     });
 });
 
-app.post('/images/tag', (req, res) => {
-    console.log('tag')
-    res.json({
-        code: true,
-        msg: 'success',
-        data: {
-            'tagList':  ['a',   'bbbbbbbbbbbbbbb',  'cccccc',   'human',    'animal',   'food', 'shark']
-        }
-    })
-})
+// Modify Password API endpoint
+app.post('/users/modifyPassword', (req, res) => {
+    const { id, password, newPassword } = req.body;
 
-app.post('/images/search', (req, res) => {
-    console.log('search');
-    console.log(req.body);
-    res.json({
-        code: true,
-        msg: 'success',
-        data: {
-                "photos": [
-                    {
-                        "photoId": 1,
-                        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-                    },
-                    {
-                    "photoId": 2,
-                    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-                  },
-                ]
-        }
-    })
-})
+    // Find the user by ID (you should use a database for this)
+    const user = users.find(user => user.password === password);
 
-app.post('/images/classification', (req, res) => {
-    const {classificationType} = req.body;
-    console.log('querying classification');
-    console.log(classificationType);
-    res.json({
-        code: true,
-        msg: 'success',
-        data: [{
-            "category": null,
-            "photos": [
-              {
-                "photoId": 1,
-                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-            },
-            {
-            "photoId": 2,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-            {
-            "photoId": 3,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-          {
-            "photoId": 1,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-        },
-        {
-        "photoId": 2,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-        {
-        "photoId": 3,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-      {
-        "photoId": 1,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-    },
-    {
-    "photoId": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-    {
-    "photoId": 3,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  }
-        ]
-          }
-          ]
-    })
-})
+    if (!user) {
+        res.json({
+            code: false,
+            msg: 'user not found',
+            data: null
+        });
+        return;
+    }
 
-app.post('/images/delete', (req, res) => {
-    const {imageId} = req.body;
-    console.log('deleting photo');
-    console.log(photoId);
+    // Check if the provided current password matches the stored password
+    if (user.password !== password) {
+        res.json({
+            code: false,
+            msg: 'invalid password',
+            data: null
+        });
+        return;
+    }
+
+    // Update the user's password
+    user.password = newPassword;
+
     res.json({
         code: true,
-        msg: 'photo successfully deleted! (msg from backend)',
+        msg: 'password updated',
         data: null
-    })
-})
-
-app.post('/images/detail', (req, res) => {
-    const {imageId} = req.body;
-    console.log('querying photo detail');
-    console.log(imageId);
-    res.json({
-        code: true,
-        msg: 'sucess',
-        data: {
-            "imageId": 15,
-            "imageName": "北理桥.jpg",
-            "imageType": "jpeg",
-            "imageSize": 3821734,
-            "imagePath": "https://photoclassifierbucket.obs.cn-north-4.myhuaweicloud.com/1bdbc51e-9bb5-4350-8bfe-ae1f82c60e2b.jpg",
-            "imageTag": null,
-            "cameraName": "Xiaomi Redmi K30 Pro",
-            "locationId": null,
-            "address": null,
-            "shootingTime": "2022-10-09T17:32:52",
-            "uploadTime": "2023-08-31T23:08:55",
-            "modifiedTime": "2023-08-31T23:08:54"
-        }
-    })
-})
+    });
+});
 
 const server = http.createServer(app);
 
