@@ -11,7 +11,7 @@ const props = defineProps(['photoId', 'photoSrc', 'viewDetail'])
 const photoExist = ref(true);
 const deletePhoto = () => {
 axios.post('http://localhost:8080/images/delete', {
-    'photoId' : props.photoId
+    'imageId' : props.photoId
   },  {
     headers :  {
         'Content-Type'  : 'Application/json',

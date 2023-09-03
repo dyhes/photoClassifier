@@ -1,5 +1,4 @@
 <template>
-  <el-container>
       <el-header>
       <el-col :span="3" :offset="21">
         <el-select v-model="selectionValue" class="m-2" placeholder="Select" size="large">
@@ -24,17 +23,11 @@
             </el-main>
             <el-aside v-loading = 'photoIsLoading' element-loading-text = "loading details form server">
               <el-descriptions title="Photo Detail" :column = 1>
-              <el-descriptions-item label="imageID">  {{ photoDetail.imageId }}  </el-descriptions-item>
-              <el-descriptions-item label="imageName"> {{ photoDetail.imageName }}  </el-descriptions-item>
-              <el-descriptions-item label="imageType"> {{ photoDetail.imageType }} </el-descriptions-item>
-              <el-descriptions-item label="imageSize">{{ photoDetail.imageSize }}</el-descriptions-item>
-              <el-descriptions-item label="imageTag">  {{ photoDetail.imageTag }}  </el-descriptions-item>
-              <el-descriptions-item label="cameraName"> {{ photoDetail.cameraName }}  </el-descriptions-item>
-              <el-descriptions-item label="address"> {{ photoDetail.address }} </el-descriptions-item>
-              <el-descriptions-item label="shootingTime">{{ photoDetail.shootingTime }}</el-descriptions-item>
-              <el-descriptions-item label="modifiedTime"> {{ photoDetail.modifiedTime }}  </el-descriptions-item>
-              <el-descriptions-item label="uploadTime"> {{ photoDetail.uploadTime }}  </el-descriptions-item>
-              <el-descriptions-item label="url"> {{ photoUrl }}  </el-descriptions-item>
+              <el-descriptions-item 
+              v-for="(value, key) in photoDetail"
+              :label = 'key'>
+              {{ value === null? 'unknown' : value }}
+            </el-descriptions-item>
             </el-descriptions>
             <div id = 'deleteButton'>
               <el-popconfirm title="Are you sure to delete this photo?" @confirm = 'deleteSpecificPhoto'>
@@ -47,7 +40,6 @@
           </el-container>
          </el-dialog>
       </el-main>
-    </el-container>
   </template>
   
   <script setup>
@@ -98,7 +90,7 @@
       photoDetail.value = res.data.data
       photoIsLoading.value = false
     } catch (error) {
-      ElMessage.error('获取分类失败，请重试')
+      ElMessage.error('获取图片信息失败，请重试')
     }
   }
 
@@ -109,7 +101,6 @@
 
   watch(selectionValue,async (value) => {
     isLoading.value = true;
-    console.log(value);
     try {
       const res = await fetch('http://localhost:8080/images/classification', 
       {
@@ -125,15 +116,13 @@
       const data = await res.json();
       if (data.code) {
         imageGroups.value = data.data;
-        console.log(data.data);
-        console.log(imageGroups);
       } else {
         imageGroups.value = [];
         ElMessage.error(data.msg);
       }
       isLoading.value = false
     } catch (error) {
-      ElMessage.error(error)
+      ElMessage.error('获取分类失败，请重试')
     }
   }, {immediate:true})
   
@@ -167,9 +156,6 @@
     box-shadow:0 0 2rem rgba(0,0,0,.14)!important;
     border-radius: 1rem;
   }
-  .el-descriptions {
-    padding-top: 20px;
-  }
   .center {
     display: flex;
     align-items: center;
@@ -177,7 +163,6 @@
   }
   .el-main {
     background-color: #fff;
-    min-height: 70vh;
     color: #000;
   }
   .el-header {
