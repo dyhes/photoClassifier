@@ -52,7 +52,7 @@ const router = createRouter({
     {
         path: '/:catchAll(.*)',
         component: () => import('../views/404.vue'),
-    },
+    }
   ]
 })
 router.beforeEach((to, from, next) => {
