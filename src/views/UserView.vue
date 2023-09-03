@@ -66,6 +66,7 @@ const savePassword = () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization' : userStatus.value.token
     },
     body: JSON.stringify(dataToSend),
   })

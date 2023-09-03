@@ -139,7 +139,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     headers: {
                         'Content-Type': 'Application/json',
                     },
-                    body: JSON.stringify({ id: 1, newPassword: newPassword.value }),
+                    body: JSON.stringify({ username: param.username , newPassword: newPassword.value }),
                 });
 
                 const data = await response.json();
