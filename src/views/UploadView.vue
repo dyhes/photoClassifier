@@ -36,8 +36,9 @@
   
   const fileList = ref<UploadUserFile[]>([])
 
-  const handleError = (err, file, fileList) => {
-    ElMessage.error(err.message);
+  const handleError = (err, file, fL) => {
+    ElMessage.error("图片上传失败");
+    fileList.value.push(file);
   }
   </script> 
 
