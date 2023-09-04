@@ -231,81 +231,16 @@ app.post('/images/classification', (req, res) => {
             "photos": [
               {
                 "photoId": 1,
-                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+                "url": "https://photoclassifierbucket.obs.cn-north-4.myhuaweicloud.com/dd22df12-fcef-4901-80a4-98ce6502aa9c.ORF"
             },
             {
             "photoId": 2,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+            "url": "https://photoclassifierbucket.obs.cn-north-4.myhuaweicloud.com/dd22df12-fcef-4901-80a4-98ce6502aa9c.ORF"
           },
             {
             "photoId": 3,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-          {
-            "photoId": 1,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-        },
-        {
-        "photoId": 2,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-        {
-        "photoId": 3,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-      {
-        "photoId": 1,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-    },
-    {
-    "photoId": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-    {
-    "photoId": 3,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  }
-        ]
-          }, 
-          {
-            "category": 'b',
-            "photos": [
-              {
-                "photoId": 1,
-                "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-            },
-            {
-            "photoId": 2,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-            {
-            "photoId": 3,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-          },
-          {
-            "photoId": 1,
-            "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-        },
-        {
-        "photoId": 2,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-        {
-        "photoId": 3,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-      },
-      {
-        "photoId": 1,
-        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-    },
-    {
-    "photoId": 2,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  },
-    {
-    "photoId": 3,
-    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
-  }
+            "url": "https://www.digitalocean.com/_next/static/media/intro-to-cloud.d49bc5f7.jpeg"
+          }
         ]
           }
           ]
