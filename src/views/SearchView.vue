@@ -118,6 +118,7 @@ watchEffect( async () => {
     element-loading-text = "loading">
             <ImageGroup
             :key="1" :group-name="null"   :images="photos"  :view-detail="viewDetail"/>
+            <el-backtop :right="100" :bottom="100" target=".el-main"/>
       <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
@@ -143,3 +144,9 @@ watchEffect( async () => {
          </el-dialog>
     </el-main>
   </template>
+
+  <style scoped>
+.el-aside {
+    overflow: hidden;
+  }
+  </style>
