@@ -312,6 +312,27 @@ app.post('/images/classification', (req, res) => {
     })
 })
 
+app.post('/images/search', (req, res) => {
+    console.log('search');
+    console.log(req.body);
+    res.json({
+        code: true,
+        msg: 'success',
+        data: {
+                "photos": [
+                    {
+                        "photoId": 1,
+                        "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+                    },
+                    {
+                    "photoId": 2,
+                    "url": "https://pic1.zhimg.com/v2-a26d7705ef9fd1560edbbf8f6bd4d3b4_r.jpg"
+                  },
+                ]
+        }
+    })
+})
+
 const server = http.createServer(app);
 
 server.listen(port, () => {

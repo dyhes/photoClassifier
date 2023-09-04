@@ -166,10 +166,6 @@ button {
   width: 300px;
   margin-right: 10px;
 }
-
-.input-container button {
-  
-}
 .buttons {
     margin-top: 110px;
 }

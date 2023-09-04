@@ -16,6 +16,7 @@
     element-loading-text = "loading">
             <ImageGroup  v-for = "imageGroup in imageGroups"
             :key="imageGroup.category" :group-name="imageGroup.category"   :images="imageGroup.photos"  :view-detail="viewDetail"/>
+            <el-backtop :right="100" :bottom="100" target=".el-main"/>
         <el-dialog v-model="dialogVisible" width = '60%' top="20.5vh" style="left: 130px;border-radius:1.2rem">
           <el-container v-loading = 'deletingPhoto' element-loading-text = 'deleting photo'>
             <el-main class ='center'>
@@ -23,11 +24,14 @@
             </el-main>
             <el-aside v-loading = 'photoIsLoading' element-loading-text = "loading details form server">
               <el-descriptions title="Photo Detail" :column = 1>
+                <template
+                v-for="(value, key) in photoDetail"
+                :key="key">
               <el-descriptions-item 
-              v-for="(value, key) in photoDetail"
               :label = 'key'>
               {{ value === null? 'unknown' : value }}
             </el-descriptions-item>
+          </template>
             </el-descriptions>
             <div id = 'deleteButton'>
               <el-popconfirm title="Are you sure to delete this photo?" @confirm = 'deleteSpecificPhoto'>
@@ -147,10 +151,15 @@
 
   <style scoped>
   #deleteButton {
-    padding-top: 40px;
     display: flex;
     align-items: center;
+    justify-content: center;
   }
+
+  .el-aside {
+    overflow: hidden;
+  }
+
   .el-select {
     padding: 10px;
     box-shadow:0 0 2rem rgba(0,0,0,.14)!important;
