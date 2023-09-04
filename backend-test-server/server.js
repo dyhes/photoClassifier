@@ -45,9 +45,7 @@ app.post('/users/login', (req, res) => {
         res.json({
             code: true,
             msg: 'success',
-            data: {
-                token: token
-            }
+            data:  token
         });
     } else {
         res.json({

@@ -84,14 +84,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-					const token = localStorage.setItem('token', data.data.token);
-
                     ElMessage.success('登录成功');
                     store.dispatch('setUser', {
                         isOnline: true,
                         userName: param.username,
                         avatarUrl: 'profile.jpg',
-						token: token
+						token: data.data
                     });
                     router.push('/upload');
                 } else {
