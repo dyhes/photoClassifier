@@ -68,14 +68,13 @@ interface SignupInfo {
     email: string;
     password: string;
     confirmPassword: string;
-
 }
 const router = useRouter();
 const param = reactive<SignupInfo>({
-    username: 'Jay',
-    email: 'jay@mail.com',
-    password: '123456',
-    confirmPassword: '123456'
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
 });
 
 const rules: FormRules = {
