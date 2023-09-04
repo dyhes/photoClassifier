@@ -149,4 +149,9 @@ watchEffect( async () => {
 .el-aside {
     overflow: hidden;
   }
+  #deleteButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   </style>

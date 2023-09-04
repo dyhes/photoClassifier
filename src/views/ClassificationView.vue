@@ -151,7 +151,6 @@
 
   <style scoped>
   #deleteButton {
-    padding-top: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
