@@ -92,7 +92,7 @@ watchEffect( async () => {
         }
       }
     )
-    photos.value = res.data.data.photos
+    photos.value = res.data.data
     isLoading.value = false
   } catch (error) {
     ElMessage.error('搜索图片失败，请重试')
