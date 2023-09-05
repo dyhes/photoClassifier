@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # 编译前端项目
-RUN npm build
+RUN npm run build
 
 # 产生静态文件
 FROM nginx:stable-alpine
