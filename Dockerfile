@@ -1,5 +1,5 @@
 # 安装Node.js
-FROM node:latest
+FROM node:18.17.1-slim
 
 # 创建工作目录
 WORKDIR /app
