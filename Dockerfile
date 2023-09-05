@@ -1,5 +1,5 @@
 # 安装Node.js
-FROM node:18.17.1-slim
+FROM node:16.13.2-buster
 
 # 创建工作目录
 WORKDIR /app
