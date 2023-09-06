@@ -122,7 +122,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('http://localhost:8080/users/signup', {
+                const response = await fetch('http://124.70.19.52:8080/users/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

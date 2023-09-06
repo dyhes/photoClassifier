@@ -82,7 +82,7 @@
     photoUrl.value = photoSrc
     photoIsLoading.value = true
     try {
-      const res = await axios.post('http://localhost:8080/images/detail', {
+      const res = await axios.post('http://124.70.19.52:8080/images/detail', {
         'imageId' : photoId
         },  {
         headers :  {
@@ -106,7 +106,7 @@
   watch(selectionValue,async (value) => {
     isLoading.value = true;
     try {
-      const res = await fetch('http://localhost:8080/images/classification', 
+      const res = await fetch('http://124.70.19.52:8080/images/classification', 
       {
         method : 'POST',
         body : JSON.stringify({

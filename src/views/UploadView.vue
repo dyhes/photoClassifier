@@ -2,7 +2,7 @@
     <el-upload
       v-model:file-list="fileList"
       class="upload-demo"
-      action="http://localhost:8080/images/upload"
+      action="http://124.70.19.52:8080/images/upload"
       :headers="
       {
         'Authorization' : store.state.user.token
