@@ -81,33 +81,33 @@ const rules: FormRules = {
     username: [
         {
             required: true,
-            message: '请输入用户名',
+            message: 'Please enter a username',
             trigger: 'blur'
         }
     ],
     email: [
         {
             required: true,
-            message: '请输入邮箱',
+            message: 'Please enter your email address',
             trigger: 'blur'
         },
         {
             type: 'email',
-            message: '请输入有效的邮箱地址',
+            message: 'Please enter a valid email address',
             trigger: ['blur', 'change']
         }
     ],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    password: [{ required: true, message: 'Please enter a password', trigger: 'blur' }],
     confirmPassword: [
         {
             required: true,
-            message: '请确认密码',
+            message: 'Please confirm your password',
             trigger: 'blur'
         },
         {
             validator: (rule, value, callback) => {
                 if (value !== param.password) {
-                    callback(new Error('密码不匹配'));
+                    callback(new Error('The passwords do not match'));
                 } else {
                     callback();
                 }
@@ -133,17 +133,17 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-                    ElMessage.success('注册成功');
+                    ElMessage.success('Sign up successfully');
                     router.push('/signin');
                 } else {
-                    ElMessage.error('注册失败');
+                    ElMessage.error('Failed to sign up');
                 }
             } catch (error) {
                 console.error('Error during signup:', error);
-                ElMessage.error('注册失败');
+                ElMessage.error('Failed to sign up');
             }
         } else {
-            ElMessage.error('请输入正确的信息');
+            ElMessage.error('Please enter the correct information');
         }
     });
 };

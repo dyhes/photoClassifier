@@ -60,11 +60,11 @@ const rules: FormRules = {
     username: [
         {
             required: true,
-            message: '请输入用户名',
+            message: 'Please enter a username',
             trigger: 'blur'
         }
     ],
-    password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+    password: [{ required: true, message: 'Please enter a password', trigger: 'blur' }]
 };
 const login = ref<FormInstance>();
 const store = useStore();
@@ -84,7 +84,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                 const data = await response.json();
 
                 if (data.code === true) {
-                    ElMessage.success('登录成功');
+                    ElMessage.success('Login successful');
                     store.dispatch('setUser', {
                         isOnline: true,
                         userName: param.username,
@@ -93,14 +93,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
                     });
                     router.push('/upload');
                 } else {
-                    ElMessage.error('登录失败');
+                    ElMessage.error('Login failed');
                 }
             } catch (error) {
                 console.error('Error during login:', error);
-                ElMessage.error('登录失败');
+                ElMessage.error('Login failed');
             }
         } else {
-            ElMessage.error('请输入正确的用户名和密码');
+            ElMessage.error('Please enter the correct username and password');
         }
     });
 };
