@@ -51,7 +51,7 @@ setTimeout(()=>{
               <el-button class="user" @click="handleCommand('user')">
                   <el-icon  :size="25"><User /></el-icon>
               </el-button>
-              <el-button class="logout" @click="handleCommand('logout')">退出</el-button>
+              <el-button class="logout" @click="handleCommand('logout')">logout</el-button>
             </div>
           </div>
         </div>

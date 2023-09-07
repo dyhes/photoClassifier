@@ -1,7 +1,7 @@
 <template>
   <div class="forget-pass-wrap">
     <div class="ms-fpwd">
-      <div class="ms-title">照片分类系统 - 忘记密码</div>
+      <div class="ms-title">BIT Photo Sorter - Forgot Password</div>
       <el-form :model="param" :rules="rules" ref="forgotPassword" label-width="0px" class="ms-content">
         <el-form-item prop="username">
           <el-input v-model="param.username" placeholder="username">
@@ -31,14 +31,14 @@
         </div>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm(forgotPassword)">
-            {{ showNewPassword ? 'Submit' : '获取验证码' }}
+            {{ showNewPassword ? 'Submit' : 'Get Verification Code' }}
           </el-button>
         </div>
         <div class="signup">
-          <p class="login-tips">记得密码?</p>
-          <router-link class="signin-btn" to="/signin">登陆</router-link>
-          <p class="signup-tips">没有账户?</p>
-          <router-link class="signup-btn" to="/signup">注册</router-link>
+          <p class="login-tips">Remember the password?</p>
+          <router-link class="signin-btn" to="/signin">Sign in</router-link>
+          <p class="signup-tips">No account?</p>
+          <router-link class="signup-btn" to="/signup">Sign up</router-link>
         </div>
       </el-form>
     </div>
@@ -100,7 +100,7 @@ const sendVerificationCode = async () => {
   if (verificationCodeSent.value) return;
 
   try {
-    const response = await fetch('http://124.70.19.52:8080/users/forgetPassword', {
+    const response = await fetch('http://localhost:8080/users/forgetPassword', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/json',
@@ -134,7 +134,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             console.log(verificationCode.value);
         if (verificationCode.value === verificationCodeFromApi.value) {
             try {
-                const response = await fetch('http://124.70.19.52:8080/users/updatePassword', {
+                const response = await fetch('http://localhost:8080/users/updatePassword', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'Application/json',

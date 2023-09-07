@@ -82,7 +82,7 @@
     photoUrl.value = photoSrc
     photoIsLoading.value = true
     try {
-      const res = await axios.post('http://124.70.19.52:8080/images/detail', {
+      const res = await axios.post('http://localhost:8080/images/detail', {
         'imageId' : photoId
         },  {
         headers :  {
@@ -94,7 +94,7 @@
       photoDetail.value = res.data.data
       photoIsLoading.value = false
     } catch (error) {
-      ElMessage.error('获取图片信息失败，请重试')
+      ElMessage.error('Failed to load image information, please try again')
     }
   }
 
@@ -106,7 +106,7 @@
   watch(selectionValue,async (value) => {
     isLoading.value = true;
     try {
-      const res = await fetch('http://124.70.19.52:8080/images/classification', 
+      const res = await fetch('http://localhost:8080/images/classification', 
       {
         method : 'POST',
         body : JSON.stringify({
@@ -126,7 +126,7 @@
       }
       isLoading.value = false
     } catch (error) {
-      ElMessage.error('获取分类失败，请重试')
+      ElMessage.error('Failed to get classification, please try again')
     }
   }, {immediate:true})
   

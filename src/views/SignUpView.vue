@@ -1,7 +1,7 @@
 <template>
     <div class="signin-wrapper">
         <div class="ms-login">
-            <div class="ms-title">照片分类系统 - 注册</div>
+            <div class="ms-title">BIT Photo Sorter - Sign up</div>
             <el-form :model="param" :rules="rules" ref="signup" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="username">
@@ -41,14 +41,14 @@
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm(signup)">注册</el-button>
+                    <el-button type="primary" @click="submitForm(signup)">Sign up</el-button>
                 </div>
                 <div class="signin">
-                    <p class="login-tips">有账号？</p>
-    				<router-link class="signup-btn" to="/signin">登陆 </router-link>
+                    <p class="login-tips">Have an account?</p>
+    				<router-link class="signup-btn" to="/signin">Sign in </router-link>
 
-					<p class="f-pwd-info">忘记密码？</p>
-    				<router-link class="f-pwd" to="/forgot-password">忘记密码</router-link>
+					<p class="f-pwd-info">Forgot password?</p>
+    				<router-link class="f-pwd" to="/forgot-password">Forgot password</router-link>
 				</div>
             </el-form>
         </div>
@@ -122,7 +122,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     formEl.validate(async (valid: boolean) => {
         if (valid) {
             try {
-                const response = await fetch('http://124.70.19.52:8080/users/signup', {
+                const response = await fetch('http://localhost:8080/users/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

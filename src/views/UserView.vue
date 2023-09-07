@@ -18,8 +18,8 @@
               <input v-model="editedUser.newPassword" type="password" />
             </div>
             <div class="buttons">
-                <button v-if="editingPassword" type="submit">保存</button>
-                <button v-if="editingPassword" @click="cancelEdit('password')">取消</button>
+                <button v-if="editingPassword" type="submit">save</button>
+                <button v-if="editingPassword" @click="cancelEdit('password')">cancel</button>
             </div>
           </div>
         </form>
@@ -62,7 +62,7 @@ const savePassword = () => {
   };
 
   // API request to change the password
-  fetch('http://124.70.19.52:8080/users/modifyPassword', {
+  fetch('http://localhost:8080/users/modifyPassword', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

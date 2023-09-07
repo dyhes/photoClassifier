@@ -2,7 +2,7 @@
     <el-upload
       v-model:file-list="fileList"
       class="upload-demo"
-      action="http://124.70.19.52:8080/images/upload"
+      action="http://localhost:8080/images/upload"
       :headers="
       {
         'Authorization' : store.state.user.token
@@ -37,7 +37,7 @@
   const fileList = ref<UploadUserFile[]>([])
 
   const handleError = (err, file, fL) => {
-    ElMessage.error("图片上传失败");
+    ElMessage.error("Image uploading failed.");
     fileList.value.push(file);
   }
   </script> 
