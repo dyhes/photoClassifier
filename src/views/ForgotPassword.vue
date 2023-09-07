@@ -100,7 +100,7 @@ const sendVerificationCode = async () => {
   if (verificationCodeSent.value) return;
 
   try {
-    const response = await fetch('http://localhost:8080/users/forgetPassword', {
+    const response = await fetch('http://124.70.19.52:8080/users/forgetPassword', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/json',
@@ -134,7 +134,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             console.log(verificationCode.value);
         if (verificationCode.value === verificationCodeFromApi.value) {
             try {
-                const response = await fetch('http://localhost:8080/users/updatePassword', {
+                const response = await fetch('http://124.70.19.52:8080/users/updatePassword', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'Application/json',
