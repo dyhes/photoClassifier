@@ -10,7 +10,7 @@ const store = useStore();
 const props = defineProps(['photoId', 'photoSrc', 'viewDetail'])
 const photoExist = ref(true);
 const deletePhoto = () => {
-axios.post('http://124.70.19.52:8080/images/delete', {
+axios.post('http://localhost:8080/images/delete', {
     'imageId' : props.photoId
   },  {
     headers :  {

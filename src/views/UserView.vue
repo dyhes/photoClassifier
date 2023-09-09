@@ -62,7 +62,7 @@ const savePassword = () => {
   };
 
   // API request to change the password
-  fetch('http://124.70.19.52:8080/users/modifyPassword', {
+  fetch('http://localhost:8080/users/modifyPassword', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
